@@ -60,7 +60,7 @@ export default function Home() {
   }, [entries]);
 
   return (
-    <main className="min-h-screen bg-gray-800 p-6">
+    <main className="min-h-screen bg-white text-black p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center">
           Contractor Time Card App
@@ -68,49 +68,49 @@ export default function Home() {
 
         <div className="bg-white rounded-2xl shadow p-6 mb-8 grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block font-semibold mb-1">Date</label>
+            <label className="block font-semibold mb-1 text-black">Date</label>
             <input
               type="date"
               value={form.date}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
-              className="w-full border rounded-lg p-2"
+              className="w-full className="w-full border border-gray-500 rounded-lg p-2 text-black bg-white""
             />
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Hourly Wage</label>
+            <label className="block font-semibold mb-1 text-black">Hourly Wage</label>
             <input
               type="number"
               value={form.wage}
               onChange={(e) =>
                 setForm({ ...form, wage: Number(e.target.value) })
               }
-              className="w-full border rounded-lg p-2"
+              className="w-full className="w-full border border-gray-500 rounded-lg p-2 text-black bg-white""
             />
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">Start Time</label>
+            <label className="block font-semibold mb-1 text-black">Start Time</label>
             <input
               type="time"
               value={form.start}
               onChange={(e) => setForm({ ...form, start: e.target.value })}
-              className="w-full border rounded-lg p-2"
+              className="w-full className="w-full border border-gray-500 rounded-lg p-2 text-black bg-white""
             />
           </div>
 
           <div>
-            <label className="block font-semibold mb-1">End Time</label>
+            <label className="block font-semibold mb-1 text-black">End Time</label>
             <input
               type="time"
               value={form.end}
               onChange={(e) => setForm({ ...form, end: e.target.value })}
-              className="w-full border rounded-lg p-2"
+              className="w-full className="w-full border border-gray-500 rounded-lg p-2 text-black bg-white""
             />
           </div>
 
           <div className="md:col-span-2">
-            <label className="block font-semibold mb-1">
+            <label className="block font-semibold mb-1 text-black">
               Work Description
             </label>
             <textarea
@@ -118,7 +118,7 @@ export default function Home() {
               onChange={(e) =>
                 setForm({ ...form, description: e.target.value })
               }
-              className="w-full border rounded-lg p-2 h-24"
+              className="w-full className="w-full border border-gray-500 rounded-lg p-2 text-black bg-white" h-24"
               placeholder="Describe work completed today"
             />
           </div>
