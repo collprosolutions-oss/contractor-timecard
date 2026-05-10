@@ -60,7 +60,7 @@ export default function Home() {
   }, [entries]);
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
+    <main className="min-h-screen bg-gray-800 p-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center">
           Contractor Time Card App
