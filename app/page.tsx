@@ -14,6 +14,15 @@ type Entry = {
   description: string;
 };
 
+type EntryWithTotals = Entry & {
+  hours: number;
+  gross: number;
+  net: number;
+  week: string;
+  month: string;
+  year: string;
+};
+
 function today() {
   return new Date().toISOString().split("T")[0];
 }
@@ -22,7 +31,7 @@ function hoursBetween(start: string, end: string) {
   const [sh, sm] = start.split(":").map(Number);
   const [eh, em] = end.split(":").map(Number);
 
-  let startMinutes = sh * 60 + sm;
+  const startMinutes = sh * 60 + sm;
   let endMinutes = eh * 60 + em;
 
   if (endMinutes < startMinutes) endMinutes += 24 * 60;
@@ -60,7 +69,7 @@ export default function Home() {
   const currentGross = currentHours * form.wage;
   const currentNet = currentGross - form.expenses;
 
-  const entriesWithTotals = entries.map((entry) => {
+  const entriesWithTotals: EntryWithTotals[] = entries.map((entry) => {
     const hours = hoursBetween(entry.start, entry.end);
     const gross = hours * entry.wage;
     const net = gross - entry.expenses;
@@ -90,7 +99,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const weekly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.week]) groups[entry.week] = [];
       groups[entry.week].push(entry);
@@ -99,7 +108,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const monthly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.month]) groups[entry.month] = [];
       groups[entry.month].push(entry);
@@ -108,7 +117,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const yearly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.year]) groups[entry.year] = [];
       groups[entry.year].push(entry);
@@ -454,7 +463,7 @@ function ReportSection({
   groups,
 }: {
   title: string;
-  groups: Record<string, any[]>;
+  groups: Record<string, EntryWithTotals[]>;
 }) {
   const keys = Object.keys(groups).sort().reverse();
 
