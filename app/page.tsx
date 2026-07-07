@@ -14,6 +14,15 @@ type Entry = {
   description: string;
 };
 
+type EntryWithTotals = Entry & {
+  hours: number;
+  gross: number;
+  net: number;
+  week: string;
+  month: string;
+  year: string;
+};
+
 function today() {
   return new Date().toISOString().split("T")[0];
 }
@@ -22,7 +31,7 @@ function hoursBetween(start: string, end: string) {
   const [sh, sm] = start.split(":").map(Number);
   const [eh, em] = end.split(":").map(Number);
 
-  let startMinutes = sh * 60 + sm;
+  const startMinutes = sh * 60 + sm;
   let endMinutes = eh * 60 + em;
 
   if (endMinutes < startMinutes) endMinutes += 24 * 60;
@@ -60,7 +69,7 @@ export default function Home() {
   const currentGross = currentHours * form.wage;
   const currentNet = currentGross - form.expenses;
 
-  const entriesWithTotals = entries.map((entry) => {
+  const entriesWithTotals: EntryWithTotals[] = entries.map((entry) => {
     const hours = hoursBetween(entry.start, entry.end);
     const gross = hours * entry.wage;
     const net = gross - entry.expenses;
@@ -90,7 +99,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const weekly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.week]) groups[entry.week] = [];
       groups[entry.week].push(entry);
@@ -99,7 +108,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const monthly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.month]) groups[entry.month] = [];
       groups[entry.month].push(entry);
@@ -108,7 +117,7 @@ export default function Home() {
   }, [entriesWithTotals]);
 
   const yearly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
+    const groups: Record<string, EntryWithTotals[]> = {};
     entriesWithTotals.forEach((entry) => {
       if (!groups[entry.year]) groups[entry.year] = [];
       groups[entry.year].push(entry);
@@ -160,7 +169,7 @@ export default function Home() {
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "contractor-time-card.csv";
+    link.download = "contractor-work-log.csv";
     link.click();
 
     URL.revokeObjectURL(url);
@@ -171,10 +180,10 @@ export default function Home() {
       <div className="max-w-7xl mx-auto space-y-6">
         <section className="bg-blue-900 text-white rounded-3xl p-6 shadow-lg">
           <h1 className="text-3xl md:text-5xl font-bold">
-            Contractor Time Card App
+            Contractor Work Log App
           </h1>
           <p className="text-blue-100 mt-2 text-lg">
-            Track hours, pay, job descriptions, expenses, and reports.
+            Track hours, pay, job descriptions, expenses, and reports in a standalone app.
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
@@ -186,7 +195,7 @@ export default function Home() {
         </section>
 
         <section className="bg-white rounded-3xl shadow p-5 md:p-6">
-          <h2 className="text-2xl font-bold mb-4">Add Daily Time Card</h2>
+          <h2 className="text-2xl font-bold mb-4">Add Daily Work Log</h2>
 
           <div className="grid md:grid-cols-3 gap-4">
             <Field label="Date">
@@ -281,13 +290,13 @@ export default function Home() {
             onClick={addEntry}
             className="mt-5 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl w-full md:w-auto"
           >
-            Add Time Entry
+            Add Work Entry
           </button>
         </section>
 
         <section className="bg-white rounded-3xl shadow p-5 md:p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-            <h2 className="text-2xl font-bold">Time Card Entries</h2>
+            <h2 className="text-2xl font-bold">Work Log Entries</h2>
             <button
               onClick={exportCSV}
               className="bg-green-700 hover:bg-green-800 text-white font-bold px-5 py-3 rounded-xl"
@@ -318,7 +327,7 @@ export default function Home() {
                 {entriesWithTotals.length === 0 && (
                   <tr>
                     <td className="td text-center" colSpan={12}>
-                      No time entries yet.
+                      No work entries yet.
                     </td>
                   </tr>
                 )}
@@ -360,7 +369,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-4">
             <Feature title="Individual Logins" text="Each employee gets their own account." />
-            <Feature title="Cloud Storage" text="Save time cards online permanently." />
+            <Feature title="Cloud Storage" text="Save work logs online permanently." />
             <Feature title="Photo Uploads" text="Upload receipts and job photos." />
             <Feature title="GPS Clock-In" text="Admin can turn GPS tracking on or off." />
             <Feature title="Payroll Reports" text="Export payroll by week, month, or year." />
@@ -454,7 +463,7 @@ function ReportSection({
   groups,
 }: {
   title: string;
-  groups: Record<string, any[]>;
+  groups: Record<string, EntryWithTotals[]>;
 }) {
   const keys = Object.keys(groups).sort().reverse();
 
