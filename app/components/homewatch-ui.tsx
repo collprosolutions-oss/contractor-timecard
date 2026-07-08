@@ -2,40 +2,40 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { brand } from "../lib/homewatch";
+import { brandingAssets } from "../lib/site-config";
 
 export function BrandLogo({
   compact = false,
 }: Readonly<{
   compact?: boolean;
 }>) {
+  if (!compact) {
+    return (
+      <div className="rounded-[1.4rem] bg-white px-4 py-3 shadow-lg shadow-slate-950/15">
+        <Image
+          src={brandingAssets.logo}
+          alt={`${brand.name} logo`}
+          width={420}
+          height={108}
+          className="h-auto w-full max-w-[420px]"
+          priority
+        />
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={`flex items-center gap-3 ${
-        compact ? "" : "rounded-[1.4rem] bg-white px-4 py-3 shadow-lg shadow-slate-950/15"
-      }`}
-    >
+    <div className="flex items-center gap-3">
       <Image
-        src="/hqwatchfolio-icon.svg"
+        src={brandingAssets.icon}
         alt="HQWatchfolio icon"
         width={compact ? 34 : 48}
         height={compact ? 34 : 48}
         className="h-auto w-auto shrink-0"
       />
       <div className="min-w-0">
-        <p
-          className={`font-semibold tracking-tight ${
-            compact ? "text-xl text-white" : "text-xl text-slate-950 md:text-2xl"
-          }`}
-        >
-          {brand.name}
-        </p>
-        {!compact ? (
-          <p className="mt-1 text-xs font-medium uppercase tracking-[0.18em] text-sky-700">
-            {brand.tagline}
-          </p>
-        ) : (
-          <p className="text-sm text-slate-300">Premium Home Watch SaaS</p>
-        )}
+        <p className="text-xl font-semibold tracking-tight text-white">{brand.name}</p>
+        <p className="text-sm text-slate-300">Premium Home Watch SaaS</p>
       </div>
     </div>
   );

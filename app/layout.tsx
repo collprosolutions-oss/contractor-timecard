@@ -1,16 +1,34 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { brand } from "./lib/homewatch";
+import { getPublicSiteUrl } from "./lib/site-config";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
+const publicSiteUrl = getPublicSiteUrl();
+
 export const metadata: Metadata = {
-  title: "HQWatchfolio",
+  metadataBase: new URL(publicSiteUrl),
+  title: {
+    default: brand.name,
+    template: `%s | ${brand.name}`,
+  },
   description:
-    "HQWatchfolio is the complete Home Watch management platform for visits, inspections, reports, maintenance, hurricane readiness, and client communication.",
+    `${brand.name} is the complete Home Watch management platform for visits, inspections, reports, maintenance, hurricane readiness, and client communication.`,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: brand.name,
+    description: brand.tagline,
+    url: publicSiteUrl,
+    siteName: brand.name,
+    type: "website",
+  },
 };
 
 export default function RootLayout({
