@@ -19,7 +19,6 @@ import {
   testimonials,
   getOperationsSummary,
   money,
-  properties,
   reportModules,
   teamMembers,
 } from "./lib/homewatch";
