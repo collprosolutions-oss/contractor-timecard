@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Home Watching HQ",
   description:
-    "Operations and client portal foundation for a home watching business with plans, checklists, services, and subcontractor management.",
+    "Multi-page operations and client portal foundation for a home watching business with routes for admin, clients, properties, portal reporting, and subcontractor management.",
 };
 
 export default function RootLayout({
