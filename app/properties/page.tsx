@@ -9,15 +9,15 @@ export default function PropertiesPage() {
       <div className="space-y-8">
         <PageHero
           eyebrow="Property workflows"
-          title="Every watched home now has its own operational page."
-          body="Property routes keep the checklist, visit schedule, watch notes, portal visibility, and vendor work centered on the home itself."
+          title="Every watched home now has its own HQWatchfolio workspace."
+          body="Property routes keep inspections, visits, access details, vendors, storm readiness, and customer-facing reporting centered on the home itself."
           actions={<PrimaryLink href="/admin">Back to admin</PrimaryLink>}
         />
 
         <Section
           eyebrow="Portfolio"
           title="Open a specific home to manage the work."
-          body="These routes are where watch teams should land when they need to prepare a visit, close a report, or coordinate extra service."
+          body="These routes are where watch teams prepare visits, review access codes, close reports, manage work orders, and coordinate follow-up service."
         >
           <div className="grid gap-4 xl:grid-cols-2">
             {properties.map((property) => {

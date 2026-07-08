@@ -16,7 +16,7 @@ import {
   getClient,
   getClientPlanMix,
   getRequestsForProperty,
-  plans,
+  brand,
   properties,
 } from "../../lib/homewatch";
 
@@ -43,9 +43,10 @@ export default async function ClientDetailPage({
     <AppShell>
       <div className="space-y-8">
         <PageHero
-          eyebrow="Client detail"
+          eyebrow="Client management"
           title={client.name}
           body={client.notes}
+          badge={`${brand.name} account workspace`}
           actions={
             <>
               <PrimaryLink href="/clients">Back to clients</PrimaryLink>
@@ -71,8 +72,8 @@ export default async function ClientDetailPage({
 
         <Section
           eyebrow="Account summary"
-          title="View homes, approvals, and active work from the client level."
-          body="This route gives the business account context before drilling into individual properties."
+          title="Manage the customer relationship from one account screen."
+          body="Client management in HQWatchfolio includes contact details, emergency contacts, billing, documents, agreements, and linked properties."
         >
           <StatGrid>
             <StatCard
@@ -91,9 +92,9 @@ export default async function ClientDetailPage({
               detail="Dispatch or add-on work on the account"
             />
             <StatCard
-              label="Plan coverage"
-              value={portfolio.map(({ plan }) => plan?.name ?? "Unknown").join(", ")}
-              detail="Current subscription mix"
+              label="Billing plan"
+              value={client.billing.planName}
+              detail={client.billing.autopay}
             />
           </StatGrid>
         </Section>
@@ -118,11 +119,31 @@ export default async function ClientDetailPage({
           </Section>
 
           <Section
-            eyebrow="Open approvals"
-            title="Approval and dispatch context."
-            body="This is where the business sees whether client decisions are blocking extra work."
+            eyebrow="Contacts and approvals"
+            title="Emergency contacts, billing, and decision flow."
+            body="This route keeps the customer communication layer clear before the team moves into property or work order detail."
           >
             <div className="space-y-4">
+              <Panel title="Primary communication" detail={client.preferredContact} aside={<Badge tone="sky">{client.status}</Badge>}>
+                <div className="space-y-2 text-sm text-slate-300">
+                  <p>Email: {client.email}</p>
+                  <p>Phone: {client.phone}</p>
+                  <p>Billing email: {client.billing.billingEmail}</p>
+                  <p>Stripe: {client.billing.stripeStatus}</p>
+                  <p>QuickBooks: {client.billing.quickbooksExport}</p>
+                </div>
+              </Panel>
+              <Panel title="Emergency contacts" detail="People HQWatchfolio should contact during urgent issues.">
+                <div className="space-y-3">
+                  {client.emergencyContacts.map((contact) => (
+                    <div key={contact.phone} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+                      <p className="font-medium text-white">{contact.name}</p>
+                      <p>{contact.relationship}</p>
+                      <p>{contact.phone}</p>
+                    </div>
+                  ))}
+                </div>
+              </Panel>
               {approvals.map((approval) => (
                 <Panel
                   key={approval.id}
@@ -152,21 +173,29 @@ export default async function ClientDetailPage({
         </section>
 
         <Section
-          eyebrow="Plan references"
-          title="Subscription options tied to this account."
-          body="The client detail route can also surface plan information before billing or changes are made."
+          eyebrow="Documents and agreements"
+          title="Keep account paperwork visible."
+          body="Home Watch teams need fast access to agreements, compliance docs, and billing references before dispatching work."
         >
-          <div className="grid gap-4 lg:grid-cols-3">
-            {plans.map((plan) => (
-              <Panel
-                key={plan.id}
-                title={plan.name}
-                detail={plan.summary}
-                aside={<Badge tone="sky">{plan.visitCadence}</Badge>}
-              >
-                <p className="text-sm text-slate-300">{plan.reportTurnaround}</p>
-              </Panel>
-            ))}
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Panel title="Documents" detail="Reference files linked to the account.">
+              <div className="space-y-2">
+                {client.documents.map((document) => (
+                  <div key={document} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+                    {document}
+                  </div>
+                ))}
+              </div>
+            </Panel>
+            <Panel title="Agreements" detail="Service and operational approvals already on file.">
+              <div className="space-y-2">
+                {client.agreements.map((agreement) => (
+                  <div key={agreement} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+                    {agreement}
+                  </div>
+                ))}
+              </div>
+            </Panel>
           </div>
         </Section>
       </div>

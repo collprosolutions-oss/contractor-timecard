@@ -1,3 +1,10 @@
+export const brand = {
+  name: "HQWatchfolio",
+  tagline: "The Complete Home Watch Management Platform",
+  primaryDomain: "HQWatchfolio.com",
+  secondaryDomain: "HQWatchfolio.net",
+};
+
 export type PlanId = "core" | "plus" | "signature";
 
 export type Plan = {
@@ -10,6 +17,77 @@ export type Plan = {
   summary: string;
   ownerFit: string;
   includedServiceIds: string[];
+};
+
+export type PricingTier = {
+  name: string;
+  priceLabel: string;
+  summary: string;
+  cta: string;
+  features: string[];
+};
+
+export type MarketingFeature = {
+  title: string;
+  description: string;
+};
+
+export type Testimonial = {
+  quote: string;
+  person: string;
+  role: string;
+};
+
+export type EmergencyContact = {
+  name: string;
+  relationship: string;
+  phone: string;
+};
+
+export type BillingProfile = {
+  planName: string;
+  billingEmail: string;
+  autopay: string;
+  stripeStatus: string;
+  quickbooksExport: string;
+};
+
+export type Client = {
+  id: string;
+  name: string;
+  company?: string;
+  email: string;
+  phone: string;
+  status: "active" | "seasonal" | "pending";
+  preferredContact: string;
+  emergencyContacts: EmergencyContact[];
+  billing: BillingProfile;
+  documents: string[];
+  agreements: string[];
+  notes: string;
+};
+
+export type Property = {
+  id: string;
+  clientId: string;
+  name: string;
+  city: string;
+  address: string;
+  gps: string;
+  planId: PlanId;
+  occupancy: string;
+  riskLevel: "low" | "moderate" | "elevated";
+  gateCode: string;
+  alarmCode: string;
+  utilityInfo: string[];
+  preferredVendors: string[];
+  photoCount: number;
+  notes: string[];
+  insurance: string;
+  hoa: string;
+  keyStorage: string;
+  smartLockCode: string;
+  nextVisitDate: string;
 };
 
 export type ChecklistItem = {
@@ -27,49 +105,21 @@ export type ChecklistCategory = {
   items: ChecklistItem[];
 };
 
-export type Service = {
-  id: string;
-  name: string;
-  category: string;
-  delivery: string;
-  priceLabel: string;
-  description: string;
-  includedIn: PlanId[];
-};
-
-export type Client = {
-  id: string;
-  name: string;
-  company?: string;
-  email: string;
-  phone: string;
-  status: "active" | "seasonal" | "pending";
-  preferredContact: string;
-  notes: string;
-};
-
-export type Property = {
-  id: string;
-  clientId: string;
-  name: string;
-  city: string;
-  address: string;
-  planId: PlanId;
-  occupancy: string;
-  riskLevel: "low" | "moderate" | "elevated";
-  accessProfile: string;
-  watchNotes: string;
-  nextVisitDate: string;
-};
-
 export type Visit = {
   id: string;
   propertyId: string;
   scheduledFor: string;
-  completedAt?: string;
+  recurrence: "Weekly" | "Biweekly" | "Monthly" | "Custom";
+  checkIn: string;
+  checkOut: string;
+  gpsVerified: boolean;
   status: "scheduled" | "completed" | "needs-follow-up";
   watcher: string;
   summary: string;
+  arrivalPhotos: number;
+  departurePhotos: number;
+  voiceNotes: number;
+  digitalSignature: string;
   checklistCompletion: number;
   reportId?: string;
 };
@@ -83,6 +133,8 @@ export type VisitReport = {
   summary: string;
   photos: number;
   visibility: PlanId;
+  aiGenerated: boolean;
+  pdfReady: boolean;
 };
 
 export type Alert = {
@@ -96,6 +148,12 @@ export type Alert = {
   visibility: PlanId;
 };
 
+export type WeatherAlert = {
+  title: string;
+  detail: string;
+  severity: "watch" | "warning";
+};
+
 export type Approval = {
   id: string;
   propertyId: string;
@@ -104,6 +162,50 @@ export type Approval = {
   amount: string;
   requestedOn: string;
   status: "pending-owner" | "approved" | "upgrade-required";
+};
+
+export type MaintenanceRequest = {
+  id: string;
+  propertyId: string;
+  title: string;
+  category: string;
+  priority: "low" | "medium" | "high";
+  status: "open" | "scheduled" | "resolved";
+};
+
+export type WorkOrder = {
+  id: string;
+  propertyId: string;
+  title: string;
+  assignedTo: string;
+  estimate: string;
+  status: "draft" | "assigned" | "in-progress" | "complete";
+};
+
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  permissions: string[];
+  gpsTracking: string;
+  shift: string;
+  performance: string;
+};
+
+export type ActivityItem = {
+  title: string;
+  detail: string;
+  timestamp: string;
+};
+
+export type Service = {
+  id: string;
+  name: string;
+  category: string;
+  delivery: string;
+  priceLabel: string;
+  description: string;
+  includedIn: PlanId[];
 };
 
 export type Subcontractor = {
@@ -129,229 +231,187 @@ export type ServiceRequest = {
   status: "queued" | "scheduled" | "in-progress" | "done";
 };
 
+export const marketingFeatures: MarketingFeature[] = [
+  { title: "GPS Verified Visits", description: "Verify every check-in and check-out with location confidence built for service teams." },
+  { title: "Property Portfolio", description: "Manage every watched home, condo, dock, estate, and vacation property in one place." },
+  { title: "Client Management", description: "Track homeowners, billing contacts, emergency contacts, documents, and agreements." },
+  { title: "Inspection Checklists", description: "Run fully customizable visit templates for exterior, interior, pool, HVAC, dock, and storm checks." },
+  { title: "Photo & Video Reports", description: "Attach visual proof to every visit with room-by-room reporting and media compression support." },
+  { title: "AI Report Generation", description: "Turn inspection results, notes, and media into polished client-ready summaries and PDFs." },
+  { title: "Hurricane Preparation", description: "Prioritize properties, storm prep checklists, post-storm inspections, and insurance documentation." },
+  { title: "Maintenance Tracking", description: "Convert issues into maintenance requests, dispatch vendors, and follow repair history." },
+  { title: "Team Scheduling", description: "Coordinate staff schedules, recurring visit routes, and property priority windows." },
+  { title: "Work Orders", description: "Assign technicians, capture completion, and push finished work back into the customer workflow." },
+  { title: "Estimates", description: "Build optional scope approvals and estimate review directly from inspections." },
+  { title: "Invoicing", description: "Support monthly subscriptions, online payments, recurring billing, and QuickBooks export." },
+  { title: "Customer Portal", description: "Give clients access to reports, invoices, maintenance, approvals, and visit history." },
+  { title: "Mobile App", description: "Support iPhone and Android workflows with camera capture, signatures, and field speed." },
+  { title: "Office Dashboard", description: "See visits, alerts, team load, revenue, work orders, and service health from one screen." },
+  { title: "Offline Mode", description: "Keep inspections moving in low-signal areas and sync updates once service returns." },
+  { title: "Push Notifications", description: "Send email, SMS, push, and in-app notices to staff and customers." },
+];
+
+export const pricingTiers: PricingTier[] = [
+  {
+    name: "Starter",
+    priceLabel: "$149/mo",
+    summary: "For owner-operators building a modern Home Watch workflow.",
+    cta: "Start Free Trial",
+    features: [
+      "Client and property management",
+      "Recurring visits and basic checklists",
+      "Photo reports and customer portal",
+      "Mobile-ready field workflows",
+    ],
+  },
+  {
+    name: "Professional",
+    priceLabel: "$349/mo",
+    summary: "For growing companies that need scheduling, work orders, and branded reporting.",
+    cta: "Book Demo",
+    features: [
+      "Everything in Starter",
+      "AI report generation and PDF delivery",
+      "Maintenance tracking and work orders",
+      "GPS verified visits and team scheduling",
+    ],
+  },
+  {
+    name: "Enterprise",
+    priceLabel: "Custom",
+    summary: "For larger service teams that need hurricane workflows, advanced permissions, and deep integrations.",
+    cta: "Talk to Sales",
+    features: [
+      "Everything in Professional",
+      "Advanced reporting and payroll export",
+      "Storm preparation and emergency automation",
+      "Custom onboarding, integrations, and support",
+    ],
+  },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    quote: "Placeholder testimonial for future customer success stories from Home Watch companies.",
+    person: "Coming Soon",
+    role: "Founding customer spotlight",
+  },
+  {
+    quote: "Placeholder testimonial for companies using HQWatchfolio to scale premium property care.",
+    person: "Coming Soon",
+    role: "Operations leader spotlight",
+  },
+];
+
 export const plans: Plan[] = [
   {
     id: "core",
-    name: "Core Watch",
-    monthlyPrice: 189,
-    visitCadence: "2 visits each month",
-    responseWindow: "Same-day owner callback",
-    reportTurnaround: "Report delivered after every visit",
-    summary: "Entry plan for seasonal homes that need dependable check-ins.",
-    ownerFit: "Vacation condos and lower-risk homes",
-    includedServiceIds: ["walkthrough", "utilities", "reporting"],
+    name: "Starter",
+    monthlyPrice: 149,
+    visitCadence: "Biweekly visits",
+    responseWindow: "Same-day support response",
+    reportTurnaround: "Photo report after every visit",
+    summary: "Ideal for lean Home Watch teams starting with polished operations.",
+    ownerFit: "Single operators and boutique service areas",
+    includedServiceIds: ["walkthrough", "utilities", "reporting", "notifications"],
   },
   {
     id: "plus",
-    name: "Plus Watch",
-    monthlyPrice: 329,
+    name: "Professional",
+    monthlyPrice: 349,
     visitCadence: "Weekly visits",
-    responseWindow: "4-hour response window",
-    reportTurnaround: "Report plus photos after every visit",
-    summary: "Balanced plan with stronger reporting, vendor dispatch, and alerts.",
-    ownerFit: "Second homes and higher-use properties",
-    includedServiceIds: ["walkthrough", "utilities", "reporting", "storm-check", "vendor-dispatch"],
-  },
-  {
-    id: "signature",
-    name: "Signature Estate",
-    monthlyPrice: 589,
-    visitCadence: "Twice-weekly visits",
-    responseWindow: "Priority response and concierge coordination",
-    reportTurnaround: "Live portal updates, alerts, and approvals",
-    summary: "White-glove operations for estates, luxury homes, and active remodels.",
-    ownerFit: "Large homes, estates, and premium clients",
+    responseWindow: "4-hour dispatch response",
+    reportTurnaround: "AI-assisted report and PDF delivery",
+    summary: "Built for scaling teams that need scheduling, dispatch, and maintenance flow.",
+    ownerFit: "Multi-staff companies and larger client portfolios",
     includedServiceIds: [
       "walkthrough",
       "utilities",
       "reporting",
       "storm-check",
       "vendor-dispatch",
-      "concierge",
-      "project-check",
+      "notifications",
+      "ai-reporting",
+    ],
+  },
+  {
+    id: "signature",
+    name: "Enterprise",
+    monthlyPrice: 749,
+    visitCadence: "Weekly or custom enterprise cadence",
+    responseWindow: "Priority support and emergency coordination",
+    reportTurnaround: "Live portal updates, PDF delivery, and storm documentation",
+    summary: "For premium Home Watch companies managing complex estates and hurricane response.",
+    ownerFit: "Enterprise operators and high-value property portfolios",
+    includedServiceIds: [
+      "walkthrough",
+      "utilities",
+      "reporting",
+      "storm-check",
+      "vendor-dispatch",
+      "notifications",
+      "ai-reporting",
+      "hurricane-prep",
+      "work-orders",
     ],
   },
 ];
 
+export const checklistSupport = ["Pass", "Fail", "N/A", "Photos", "Comments", "Priority"];
+
 export const checklistCategories: ChecklistCategory[] = [
   {
-    id: "security",
-    title: "Security and arrival",
-    summary: "Everything the team checks first on every scheduled visit.",
+    id: "exterior",
+    title: "Exterior",
+    summary: "Street-facing, landscape, roofline, and perimeter observations.",
     items: [
-      {
-        id: "entry-check",
-        title: "Entry points secured",
-        detail: "Confirm doors, sliders, gates, and alarm zones are normal.",
-        cadence: "Every visit",
-        availableIn: ["core", "plus", "signature"],
-      },
-      {
-        id: "package-sweep",
-        title: "Package and flyer sweep",
-        detail: "Remove visible deliveries and note anything requiring owner approval.",
-        cadence: "Every visit",
-        availableIn: ["core", "plus", "signature"],
-      },
-      {
-        id: "camera-check",
-        title: "Camera and smart lock audit",
-        detail: "Validate online status and battery health for critical devices.",
-        cadence: "Weekly",
-        availableIn: ["plus", "signature"],
-      },
+      { id: "roof", title: "Roof and gutters", detail: "Inspect for storm damage, debris, or leaks.", cadence: "Every visit", availableIn: ["core", "plus", "signature"] },
+      { id: "landscape", title: "Landscape and irrigation", detail: "Check irrigation performance, drainage, and dead zones.", cadence: "Weekly", availableIn: ["core", "plus", "signature"] },
+      { id: "dock", title: "Dock and boat area", detail: "Review dock safety, lines, lift status, and visible damage.", cadence: "Custom", availableIn: ["plus", "signature"] },
     ],
   },
   {
-    id: "systems",
-    title: "Interior and systems",
-    summary: "Core home health checks designed to catch issues early.",
+    id: "interior",
+    title: "Interior",
+    summary: "HVAC, doors, windows, plumbing, and core interior health.",
     items: [
-      {
-        id: "hvac-check",
-        title: "HVAC, thermostat, and humidity review",
-        detail: "Log target temperature and note abnormal readings.",
-        cadence: "Every visit",
-        availableIn: ["core", "plus", "signature"],
-      },
-      {
-        id: "leak-check",
-        title: "Leak scan for kitchens, baths, and utility rooms",
-        detail: "Inspect sinks, supply lines, drains, and visible wall edges.",
-        cadence: "Every visit",
-        availableIn: ["core", "plus", "signature"],
-      },
-      {
-        id: "generator-check",
-        title: "Generator and backup power spot check",
-        detail: "Capture readiness state and escalate maintenance needs.",
-        cadence: "Bi-weekly",
-        availableIn: ["signature"],
-      },
+      { id: "hvac", title: "HVAC and humidity", detail: "Validate settings, supply temperature, and humidity targets.", cadence: "Every visit", availableIn: ["core", "plus", "signature"] },
+      { id: "plumbing", title: "Plumbing and leak scan", detail: "Inspect bathrooms, kitchen, laundry, and utility lines.", cadence: "Every visit", availableIn: ["core", "plus", "signature"] },
+      { id: "security", title: "Doors, windows, and alarm", detail: "Confirm all openings and security systems are normal.", cadence: "Every visit", availableIn: ["core", "plus", "signature"] },
     ],
   },
   {
-    id: "grounds",
-    title: "Exterior and weather readiness",
-    summary: "Perimeter and weather-response work tied into service add-ons.",
+    id: "assets",
+    title: "Assets and specialty systems",
+    summary: "Generators, pools, electrical, and storm-sensitive equipment.",
     items: [
-      {
-        id: "storm-scan",
-        title: "Roofline, drainage, and storm impact scan",
-        detail: "Photograph visible debris, standing water, or fresh damage.",
-        cadence: "After weather event",
-        availableIn: ["plus", "signature"],
-      },
-      {
-        id: "landscape-check",
-        title: "Landscape and irrigation look-over",
-        detail: "Flag dead zones, overspray, pooling, and contractor follow-up.",
-        cadence: "Weekly",
-        availableIn: ["plus", "signature"],
-      },
-      {
-        id: "project-oversight",
-        title: "Project progress checkpoint",
-        detail: "Verify approved subs showed up and completed scope.",
-        cadence: "As needed",
-        availableIn: ["signature"],
-      },
+      { id: "pool", title: "Pool and spa", detail: "Check equipment state, water level, and visual clarity.", cadence: "Weekly", availableIn: ["plus", "signature"] },
+      { id: "generator", title: "Generator", detail: "Confirm readiness lights, fuel, and service notes.", cadence: "Biweekly", availableIn: ["signature"] },
+      { id: "mail", title: "Mail, packages, and vehicles", detail: "Clear mail, note deliveries, and check idle vehicle condition.", cadence: "Every visit", availableIn: ["core", "plus", "signature"] },
     ],
   },
   {
-    id: "owner-updates",
-    title: "Owner communication",
-    summary: "What the client sees in the portal when a visit is complete.",
+    id: "storm",
+    title: "Storm and hurricane",
+    summary: "Preparedness and post-event recovery built into the platform.",
     items: [
-      {
-        id: "visit-report",
-        title: "Structured visit report",
-        detail: "Checklist, notes, and timestamped status update published to the portal.",
-        cadence: "Every visit",
-        availableIn: ["core", "plus", "signature"],
-      },
-      {
-        id: "photo-report",
-        title: "Photo gallery and follow-up actions",
-        detail: "Room-by-room images plus open items requiring action.",
-        cadence: "Every visit",
-        availableIn: ["plus", "signature"],
-      },
-      {
-        id: "approval-flow",
-        title: "Owner approval requests for extra work",
-        detail: "Approve vendor dispatches and quoted add-ons from the portal.",
-        cadence: "As needed",
-        availableIn: ["signature"],
-      },
+      { id: "prep", title: "Storm prep checklist", detail: "Confirm shutters, outdoor furniture, loose items, and owner requests.", cadence: "Storm prep", availableIn: ["plus", "signature"] },
+      { id: "damage", title: "Post-storm damage documentation", detail: "Capture photo evidence for insurance and emergency follow-up.", cadence: "Post-storm", availableIn: ["signature"] },
+      { id: "priority", title: "Priority property response", detail: "Escalate high-risk homes to the top of the emergency queue.", cadence: "Emergency", availableIn: ["signature"] },
     ],
   },
 ];
 
 export const serviceCatalog: Service[] = [
-  {
-    id: "walkthrough",
-    name: "Scheduled home walkthrough",
-    category: "Core service",
-    delivery: "In-house team",
-    priceLabel: "Included",
-    description: "Routine occupied or vacant-home check with checklist completion.",
-    includedIn: ["core", "plus", "signature"],
-  },
-  {
-    id: "utilities",
-    name: "Utility and leak monitoring",
-    category: "Core service",
-    delivery: "In-house team",
-    priceLabel: "Included",
-    description: "Water, power, thermostat, and visible-plumbing review each visit.",
-    includedIn: ["core", "plus", "signature"],
-  },
-  {
-    id: "reporting",
-    name: "Client portal reporting",
-    category: "Client experience",
-    delivery: "Portal workflow",
-    priceLabel: "Included",
-    description: "Owners see report history, notes, and visit completion status.",
-    includedIn: ["core", "plus", "signature"],
-  },
-  {
-    id: "storm-check",
-    name: "Storm response visit",
-    category: "Add-on service",
-    delivery: "In-house team",
-    priceLabel: "$85 per response",
-    description: "Rapid post-weather inspection with damage notes and priority photos.",
-    includedIn: ["plus", "signature"],
-  },
-  {
-    id: "vendor-dispatch",
-    name: "Vendor dispatch and scope follow-up",
-    category: "Marketplace lane",
-    delivery: "Subcontractor network",
-    priceLabel: "$45 dispatch fee",
-    description: "Assign approved subcontractors, track arrival, and log completion.",
-    includedIn: ["plus", "signature"],
-  },
-  {
-    id: "concierge",
-    name: "Arrival prep and concierge setup",
-    category: "Premium add-on",
-    delivery: "In-house team",
-    priceLabel: "$125 per visit",
-    description: "Stock, lights, thermostat, and readiness prep before owner arrival.",
-    includedIn: ["signature"],
-  },
-  {
-    id: "project-check",
-    name: "Project and remodel oversight",
-    category: "Marketplace lane",
-    delivery: "Subcontractor network",
-    priceLabel: "$160 per checkpoint",
-    description: "Coordinate access, verify scope, and publish progress updates.",
-    includedIn: ["signature"],
-  },
+  { id: "walkthrough", name: "Professional Home Watch visit", category: "Core", delivery: "Field team", priceLabel: "Included", description: "Recurring property inspection with checklist completion and media capture.", includedIn: ["core", "plus", "signature"] },
+  { id: "utilities", name: "Utility and system monitoring", category: "Core", delivery: "Field team", priceLabel: "Included", description: "Track HVAC, plumbing, electrical indicators, and system stability.", includedIn: ["core", "plus", "signature"] },
+  { id: "reporting", name: "Customer portal reporting", category: "Portal", delivery: "HQWatchfolio", priceLabel: "Included", description: "Publish branded client updates, photos, and visit history in one portal.", includedIn: ["core", "plus", "signature"] },
+  { id: "notifications", name: "SMS, push, and in-app notifications", category: "Communication", delivery: "HQWatchfolio", priceLabel: "Included", description: "Keep owners and staff informed about visits, issues, and approvals.", includedIn: ["core", "plus", "signature"] },
+  { id: "ai-reporting", name: "AI report generation", category: "AI", delivery: "HQWatchfolio", priceLabel: "Included", description: "Convert inspection notes, comments, and media into polished report drafts and PDFs.", includedIn: ["plus", "signature"] },
+  { id: "storm-check", name: "Storm inspection workflow", category: "Hurricane", delivery: "Field team", priceLabel: "$95 per event", description: "Dispatch pre-storm, post-storm, and damage inspection jobs quickly.", includedIn: ["plus", "signature"] },
+  { id: "vendor-dispatch", name: "Maintenance dispatch", category: "Work orders", delivery: "Vendor network", priceLabel: "$45 dispatch fee", description: "Create work from inspections, assign vendors, and update customers.", includedIn: ["plus", "signature"] },
+  { id: "hurricane-prep", name: "Hurricane preparation module", category: "Hurricane", delivery: "HQWatchfolio", priceLabel: "Included", description: "Run priority property response, emergency notifications, and damage tracking.", includedIn: ["signature"] },
+  { id: "work-orders", name: "Work order and estimate pipeline", category: "Operations", delivery: "Office dashboard", priceLabel: "Included", description: "Track maintenance approvals, estimates, and completion status end to end.", includedIn: ["signature"] },
 ];
 
 export const clients: Client[] = [
@@ -363,7 +423,20 @@ export const clients: Client[] = [
     phone: "(555) 201-4400",
     status: "active",
     preferredContact: "Portal + SMS",
-    notes: "Prefers photo-first updates and same-day notice for any vendor dispatch.",
+    emergencyContacts: [
+      { name: "Rachel LeBlanc", relationship: "Primary decision maker", phone: "(555) 201-4401" },
+      { name: "Mike Turner", relationship: "Local emergency contact", phone: "(555) 804-7741" },
+    ],
+    billing: {
+      planName: "Enterprise",
+      billingEmail: "billing@seabrooktrust.com",
+      autopay: "Enabled",
+      stripeStatus: "Healthy customer profile",
+      quickbooksExport: "Weekly sync",
+    },
+    documents: ["Signed service agreement", "Insurance certificate", "Storm protocol sheet"],
+    agreements: ["Home Watch master agreement", "Emergency dispatch approval", "Smart lock consent"],
+    notes: "Prefers photo-first updates, priority storm contact, and same-day approval requests.",
   },
   {
     id: "clt-marina",
@@ -372,7 +445,19 @@ export const clients: Client[] = [
     phone: "(555) 018-7330",
     status: "seasonal",
     preferredContact: "Email summary",
-    notes: "Owns multiple homes and wants budget approvals batched weekly.",
+    emergencyContacts: [
+      { name: "Adrian Cole", relationship: "Asset manager", phone: "(555) 018-7332" },
+    ],
+    billing: {
+      planName: "Professional",
+      billingEmail: "ap@marinavista.co",
+      autopay: "Pending card refresh",
+      stripeStatus: "Needs update",
+      quickbooksExport: "Month-end export",
+    },
+    documents: ["Condo HOA rules", "Rental turnover checklist"],
+    agreements: ["Professional services agreement"],
+    notes: "Owns multiple homes and prefers grouped maintenance approvals once each week.",
   },
 ];
 
@@ -383,11 +468,24 @@ export const properties: Property[] = [
     name: "Seabrook Residence",
     city: "North Bay",
     address: "14 Sandpiper Bluff, North Bay, FL",
+    gps: "29.1523, -81.0418",
     planId: "signature",
-    occupancy: "Seasonal family home",
+    occupancy: "Seasonal family estate",
     riskLevel: "elevated",
-    accessProfile: "Smart lock + gate code + pool vendor window",
-    watchNotes: "Pool equipment and side-yard drainage are priority watch items.",
+    gateCode: "Gate 4401",
+    alarmCode: "Panel zone profile in portal",
+    utilityInfo: ["FPL #190332", "City Water acct #774120", "Pool controller online"],
+    preferredVendors: ["Greenline Outdoor", "Coastline Plumbing", "Bright Current Electric"],
+    photoCount: 186,
+    notes: [
+      "Priority property during storms due to waterfront exposure.",
+      "Watch pool equipment and side-yard drainage closely in wet season.",
+      "Family arrival prep typically requested before holiday weekends.",
+    ],
+    insurance: "Gulf Shore Mutual policy #GS-44018",
+    hoa: "Seabrook Preserve HOA",
+    keyStorage: "Locked cabinet slot A-4",
+    smartLockCode: "Owner-managed August access profile",
     nextVisitDate: "Jul 10",
   },
   {
@@ -396,11 +494,23 @@ export const properties: Property[] = [
     name: "Harbor Condo",
     city: "South Bay",
     address: "88 Marina Row Unit 5B, South Bay, FL",
+    gps: "29.0912, -80.9875",
     planId: "core",
-    occupancy: "Short-stay condo",
+    occupancy: "Vacation condo",
     riskLevel: "low",
-    accessProfile: "Building concierge + lockbox",
-    watchNotes: "Main focus is storm prep and HVAC stability in off-season months.",
+    gateCode: "Lobby concierge release",
+    alarmCode: "No alarm panel on site",
+    utilityInfo: ["HOA-managed water", "FPL condo meter", "Xfinity Wi-Fi modem"],
+    preferredVendors: ["Harbor Handy Services"],
+    photoCount: 42,
+    notes: [
+      "Main focus is storm prep and HVAC stability in off-season months.",
+      "Building manager prefers all maintenance visits scheduled before 2 PM.",
+    ],
+    insurance: "Coastal Condo Package #CND-55290",
+    hoa: "Marina Row Association",
+    keyStorage: "Building lockbox 5B",
+    smartLockCode: "Condo Yale entry profile",
     nextVisitDate: "Jul 15",
   },
   {
@@ -409,11 +519,23 @@ export const properties: Property[] = [
     name: "Cypress Estate",
     city: "West Lake",
     address: "220 Cypress Ridge, West Lake, FL",
+    gps: "28.9810, -81.1214",
     planId: "plus",
     occupancy: "Luxury rental hold",
     riskLevel: "moderate",
-    accessProfile: "Caretaker entrance + detached guest house",
-    watchNotes: "Irrigation, guest house humidity, and landscaping vendor oversight matter most.",
+    gateCode: "North service gate 7382",
+    alarmCode: "Guest house keypad profile",
+    utilityInfo: ["Well + treatment system", "Propane generator", "Irrigation control panel"],
+    preferredVendors: ["Greenline Outdoor", "Harbor Handy Services"],
+    photoCount: 121,
+    notes: [
+      "Irrigation, guest house humidity, and landscaping oversight matter most.",
+      "Boat dock is inspected during custom monthly specialty check.",
+    ],
+    insurance: "Estate Portfolio #EST-88301",
+    hoa: "Private road association",
+    keyStorage: "Caretaker closet lockbox",
+    smartLockCode: "Guest wing Schlage profile",
     nextVisitDate: "Jul 11",
   },
 ];
@@ -423,30 +545,52 @@ export const visits: Visit[] = [
     id: "visit-1001",
     propertyId: "prop-seabrook",
     scheduledFor: "Jul 10",
+    recurrence: "Weekly",
+    checkIn: "10:00 AM",
+    checkOut: "11:10 AM",
+    gpsVerified: true,
     status: "scheduled",
     watcher: "Maya Rios",
-    summary: "Priority visit focused on storm readiness and owner arrival prep.",
+    summary: "Priority visit focused on storm readiness, maintenance follow-up, and arrival prep review.",
+    arrivalPhotos: 0,
+    departurePhotos: 0,
+    voiceNotes: 1,
+    digitalSignature: "Pending client report release",
     checklistCompletion: 0,
   },
   {
     id: "visit-1000",
     propertyId: "prop-seabrook",
     scheduledFor: "Jul 6",
-    completedAt: "Jul 6, 4:20 PM",
+    recurrence: "Weekly",
+    checkIn: "10:05 AM",
+    checkOut: "11:02 AM",
+    gpsVerified: true,
     status: "completed",
     watcher: "Maya Rios",
-    summary: "All entry points secured, HVAC normal, and drainage spot check logged.",
-    checklistCompletion: 92,
+    summary: "Exterior secure, HVAC stable, and storm prep recommendations drafted for owner review.",
+    arrivalPhotos: 5,
+    departurePhotos: 6,
+    voiceNotes: 2,
+    digitalSignature: "Signed by Maya Rios",
+    checklistCompletion: 96,
     reportId: "report-1000",
   },
   {
     id: "visit-2000",
     propertyId: "prop-harbor",
     scheduledFor: "Jul 3",
-    completedAt: "Jul 3, 1:05 PM",
+    recurrence: "Biweekly",
+    checkIn: "1:00 PM",
+    checkOut: "1:45 PM",
+    gpsVerified: true,
     status: "completed",
     watcher: "Andre Cole",
-    summary: "Condo closed cleanly with no exception items and stable humidity.",
+    summary: "Condo closed cleanly with no exception items and updated photo set for the owner portal.",
+    arrivalPhotos: 3,
+    departurePhotos: 3,
+    voiceNotes: 0,
+    digitalSignature: "Signed by Andre Cole",
     checklistCompletion: 100,
     reportId: "report-2000",
   },
@@ -454,10 +598,17 @@ export const visits: Visit[] = [
     id: "visit-3000",
     propertyId: "prop-cypress",
     scheduledFor: "Jul 5",
-    completedAt: "Jul 5, 5:10 PM",
+    recurrence: "Weekly",
+    checkIn: "4:10 PM",
+    checkOut: "5:24 PM",
+    gpsVerified: true,
     status: "needs-follow-up",
     watcher: "Jada Nguyen",
-    summary: "Irrigation leak near the guest house flagged for vendor dispatch.",
+    summary: "Irrigation leak near the guest house triggered a maintenance request and follow-up estimate.",
+    arrivalPhotos: 4,
+    departurePhotos: 5,
+    voiceNotes: 1,
+    digitalSignature: "Signed by Jada Nguyen",
     checklistCompletion: 84,
     reportId: "report-3000",
   },
@@ -468,41 +619,49 @@ export const reports: VisitReport[] = [
     id: "report-1000",
     propertyId: "prop-seabrook",
     visitId: "visit-1000",
-    title: "Weekly walkthrough completed",
+    title: "Weekly Home Watch report",
     date: "Jul 6",
-    summary: "All entry points secured, HVAC normal, no leak activity found.",
-    photos: 8,
+    summary: "All entry points secured, HVAC stable, dock checked, and storm prep recommendations documented.",
+    photos: 14,
     visibility: "core",
+    aiGenerated: true,
+    pdfReady: true,
   },
   {
     id: "report-1001",
     propertyId: "prop-seabrook",
     visitId: "visit-1000",
-    title: "Storm follow-up posted",
+    title: "Storm preparation advisory",
     date: "Jul 4",
-    summary: "Minor branch debris on pool deck; no roofline damage visible.",
-    photos: 14,
+    summary: "Outdoor furnishings, drains, and priority storm actions captured for fast owner approval.",
+    photos: 9,
     visibility: "plus",
+    aiGenerated: true,
+    pdfReady: true,
   },
   {
     id: "report-1002",
     propertyId: "prop-seabrook",
     visitId: "visit-1000",
-    title: "Vendor checkpoint recorded",
+    title: "Vendor and maintenance follow-up",
     date: "Jul 2",
-    summary: "Irrigation contractor completed valve swap; owner approval closed.",
+    summary: "Drainage correction scope, irrigation follow-up, and concierge prep items summarized for the client.",
     photos: 11,
     visibility: "signature",
+    aiGenerated: true,
+    pdfReady: true,
   },
   {
     id: "report-2000",
     propertyId: "prop-harbor",
     visitId: "visit-2000",
-    title: "Bi-monthly condo review",
+    title: "Condo watch summary",
     date: "Jul 3",
-    summary: "Mail handled, thermostat normal, balcony drains clear.",
+    summary: "Mail handled, thermostat normal, balcony drains clear, and no maintenance flags.",
     photos: 4,
     visibility: "core",
+    aiGenerated: true,
+    pdfReady: true,
   },
   {
     id: "report-3000",
@@ -510,9 +669,11 @@ export const reports: VisitReport[] = [
     visitId: "visit-3000",
     title: "Guest house irrigation alert",
     date: "Jul 5",
-    summary: "Overspray and pooling found near the guest house line; dispatch queued.",
+    summary: "Pooling and overspray found near the guest house line; a follow-up work order was created.",
     photos: 9,
     visibility: "plus",
+    aiGenerated: true,
+    pdfReady: true,
   },
 ];
 
@@ -521,9 +682,9 @@ export const alerts: Alert[] = [
     id: "alert-1",
     propertyId: "prop-seabrook",
     title: "Humidity spike detected",
-    detail: "Guest bath humidity moved above target and was rechecked at next visit.",
+    detail: "Guest bath humidity moved above target and was rechecked at the next visit.",
     severity: "medium",
-    channel: "Portal and SMS",
+    channel: "Portal, SMS, and in-app",
     state: "watching",
     visibility: "plus",
   },
@@ -559,6 +720,19 @@ export const alerts: Alert[] = [
   },
 ];
 
+export const weatherAlerts: WeatherAlert[] = [
+  {
+    title: "Coastal storm watch",
+    detail: "Wind and heavy rain expected within 36 hours for North Bay and South Bay properties.",
+    severity: "watch",
+  },
+  {
+    title: "Hurricane preparation advisory",
+    detail: "Enterprise properties should begin storm prep checklist review and owner confirmations.",
+    severity: "warning",
+  },
+];
+
 export const approvals: Approval[] = [
   {
     id: "approval-1",
@@ -581,12 +755,103 @@ export const approvals: Approval[] = [
   {
     id: "approval-3",
     propertyId: "prop-cypress",
-    title: "Expanded guest house leak scope",
-    detail: "Approval is required before converting the dispatch into a full repair project.",
+    title: "Expanded leak repair scope",
+    detail: "Approval is required before converting the dispatch into a full guest house repair project.",
     amount: "$680",
     requestedOn: "Jul 6",
     status: "upgrade-required",
   },
+];
+
+export const maintenanceRequests: MaintenanceRequest[] = [
+  {
+    id: "maint-1",
+    propertyId: "prop-seabrook",
+    title: "Drainage correction at side gate",
+    category: "Exterior drainage",
+    priority: "high",
+    status: "scheduled",
+  },
+  {
+    id: "maint-2",
+    propertyId: "prop-cypress",
+    title: "Guest house irrigation leak",
+    category: "Irrigation",
+    priority: "high",
+    status: "open",
+  },
+  {
+    id: "maint-3",
+    propertyId: "prop-harbor",
+    title: "Balcony slider tune-up",
+    category: "Doors and windows",
+    priority: "low",
+    status: "resolved",
+  },
+];
+
+export const workOrders: WorkOrder[] = [
+  {
+    id: "wo-1",
+    propertyId: "prop-seabrook",
+    title: "Drainage correction work order",
+    assignedTo: "Greenline Outdoor",
+    estimate: "$420",
+    status: "assigned",
+  },
+  {
+    id: "wo-2",
+    propertyId: "prop-cypress",
+    title: "Guest house irrigation repair",
+    assignedTo: "Greenline Outdoor",
+    estimate: "$680",
+    status: "in-progress",
+  },
+  {
+    id: "wo-3",
+    propertyId: "prop-seabrook",
+    title: "Arrival prep concierge setup",
+    assignedTo: "Internal team",
+    estimate: "$125",
+    status: "draft",
+  },
+];
+
+export const teamMembers: TeamMember[] = [
+  {
+    id: "team-1",
+    name: "Maya Rios",
+    role: "Lead Home Watch Inspector",
+    permissions: ["Visits", "AI reports", "Storm checks"],
+    gpsTracking: "Enabled",
+    shift: "North Bay route",
+    performance: "98% on-time completion",
+  },
+  {
+    id: "team-2",
+    name: "Andre Cole",
+    role: "Client Success + Field Support",
+    permissions: ["Portal updates", "Photos", "Maintenance dispatch"],
+    gpsTracking: "Enabled",
+    shift: "South Bay route",
+    performance: "95% client satisfaction",
+  },
+  {
+    id: "team-3",
+    name: "Jada Nguyen",
+    role: "Operations Coordinator",
+    permissions: ["Scheduling", "Work orders", "Billing export"],
+    gpsTracking: "Office only",
+    shift: "Office dashboard",
+    performance: "100% work order follow-up within SLA",
+  },
+];
+
+export const activities: ActivityItem[] = [
+  { title: "AI report generated", detail: "Weekly Home Watch report published for Seabrook Residence.", timestamp: "10 minutes ago" },
+  { title: "Work order assigned", detail: "Guest house irrigation repair routed to Greenline Outdoor.", timestamp: "25 minutes ago" },
+  { title: "Storm prep alert sent", detail: "Priority property notifications sent to all Enterprise accounts.", timestamp: "1 hour ago" },
+  { title: "Invoice synced", detail: "Professional plan renewal exported to QuickBooks.", timestamp: "2 hours ago" },
 ];
 
 export const subcontractors: Subcontractor[] = [
@@ -608,7 +873,7 @@ export const subcontractors: Subcontractor[] = [
     responseWindow: "Same day",
     status: "Portal-ready dispatch partner",
     activationPlans: ["plus", "signature"],
-    services: ["Panel resets", "Lighting issues", "Smart device installs"],
+    services: ["Panel resets", "Lighting issues", "Smart lock installs"],
   },
   {
     id: "sub-greenline",
@@ -637,7 +902,7 @@ export const serviceRequests: ServiceRequest[] = [
     id: "request-1",
     propertyId: "prop-seabrook",
     title: "Drainage correction dispatch",
-    serviceId: "project-check",
+    serviceId: "work-orders",
     subcontractorId: "sub-greenline",
     estimateLabel: "$420 estimate",
     scheduledFor: "Jul 12",
@@ -648,7 +913,7 @@ export const serviceRequests: ServiceRequest[] = [
     id: "request-2",
     propertyId: "prop-seabrook",
     title: "Arrival prep service",
-    serviceId: "concierge",
+    serviceId: "ai-reporting",
     estimateLabel: "$125 service",
     scheduledFor: "Jul 9",
     ownerApprovalRequired: false,
@@ -665,6 +930,38 @@ export const serviceRequests: ServiceRequest[] = [
     ownerApprovalRequired: true,
     status: "in-progress",
   },
+];
+
+export const portalInbox = [
+  "View reports",
+  "View photos",
+  "View invoices",
+  "Approve work",
+  "Request maintenance",
+  "Message company",
+  "See visit history",
+  "Receive notifications",
+];
+
+export const reportModules = [
+  "Revenue",
+  "Visits",
+  "Employee Performance",
+  "Properties",
+  "Clients",
+  "Maintenance",
+  "GPS Logs",
+  "Photo History",
+  "Inspection Trends",
+];
+
+export const mobileCapabilities = [
+  "Android and iPhone ready",
+  "Offline inspection support",
+  "GPS capture and verification",
+  "Camera integration and compression",
+  "Push notifications",
+  "Digital signatures",
 ];
 
 export function money(value: number) {
@@ -711,6 +1008,14 @@ export function getRequestsForProperty(propertyId: string) {
   return serviceRequests.filter((request) => request.propertyId === propertyId);
 }
 
+export function getMaintenanceForProperty(propertyId: string) {
+  return maintenanceRequests.filter((request) => request.propertyId === propertyId);
+}
+
+export function getWorkOrdersForProperty(propertyId: string) {
+  return workOrders.filter((workOrder) => workOrder.propertyId === propertyId);
+}
+
 export function getVisibleChecklist(planId: PlanId) {
   return checklistCategories
     .map((category) => ({
@@ -728,10 +1033,6 @@ export function getSubcontractor(subcontractorId: string) {
   return subcontractors.find((subcontractor) => subcontractor.id === subcontractorId);
 }
 
-export function getPropertiesForPlan(planId: PlanId) {
-  return properties.filter((property) => property.planId === planId);
-}
-
 export function getOperationsSummary() {
   return {
     clientCount: clients.length,
@@ -740,7 +1041,13 @@ export function getOperationsSummary() {
       const plan = getPlan(property.planId);
       return sum + (plan?.monthlyPrice ?? 0);
     }, 0),
-    scheduledVisits: visits.filter((visit) => visit.status === "scheduled").length,
+    todaysVisits: visits.filter((visit) => visit.status === "scheduled").length,
+    completedVisits: visits.filter((visit) => visit.status === "completed").length,
+    weatherAlerts: weatherAlerts.length,
+    hurricaneAlerts: weatherAlerts.filter((alert) => alert.severity === "warning").length,
+    openMaintenanceRequests: maintenanceRequests.filter((request) => request.status !== "resolved").length,
+    upcomingSchedule: visits.length,
+    recentActivity: activities.length,
     openAlerts: alerts.filter((alert) => alert.state !== "closed").length,
     vendorJobs: serviceRequests.filter((request) => request.subcontractorId).length,
   };

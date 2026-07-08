@@ -18,6 +18,7 @@ import {
   getProperty,
   getReportsForProperty,
   money,
+  portalInbox,
   type PlanId,
 } from "../../lib/homewatch";
 
@@ -59,7 +60,7 @@ export default async function PortalPropertyPage({
         <PageHero
           eyebrow="Owner portal"
           title={`Portal for ${property.name}`}
-          body="This route is the client-facing side of the product. It shows the reports, alerts, included services, and approvals available at the current subscription level."
+          body="This client-facing workspace gives homeowners access to reports, photos, invoices, approvals, maintenance requests, messages, visit history, and notifications."
           actions={
             <>
               <PrimaryLink href={`/properties/${property.id}`}>Open property operations</PrimaryLink>
@@ -80,8 +81,8 @@ export default async function PortalPropertyPage({
 
         <Section
           eyebrow="Portal visibility"
-          title="Let owners see what happened every time you visit."
-          body="The plan tier controls how deep the portal goes, from routine summaries up through photo-heavy reporting and approval requests."
+          title="Let customers see exactly what is happening at their property."
+          body="HQWatchfolio turns every visit into a premium customer experience with polished reports, media, approvals, invoices, and maintenance visibility."
         >
           <StatGrid>
             <StatCard
@@ -194,6 +195,46 @@ export default async function PortalPropertyPage({
               </div>
             </Section>
           </div>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
+          <Section
+            eyebrow="Portal tools"
+            title="Everything the customer can do in one place."
+            body="The customer portal is positioned as a premium experience, not just a report viewer."
+          >
+            <div className="grid gap-3 md:grid-cols-2">
+              {portalInbox.map((item) => (
+                <div key={item} className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section
+            eyebrow="Billing and communication"
+            title="Invoices, notifications, and message flow."
+            body="Owners should be able to stay informed and approve work without waiting for a manual follow-up."
+          >
+            <div className="space-y-4">
+              <Panel title="Invoices" detail="Current subscription, recurring billing, and online payments stay visible.">
+                <p className="text-sm text-slate-300">
+                  Enterprise plan invoice ready with Stripe-backed recurring billing and QuickBooks export support.
+                </p>
+              </Panel>
+              <Panel title="Notifications" detail="Email, SMS, push, and in-app notices keep owners updated.">
+                <p className="text-sm text-slate-300">
+                  Weather alerts, maintenance approvals, visit completions, and report delivery all trigger customer communication.
+                </p>
+              </Panel>
+              <Panel title="Messages and maintenance" detail="Owners can request work directly inside the portal.">
+                <p className="text-sm text-slate-300">
+                  Maintenance requests are tied to the same property timeline as inspections, work orders, and vendor updates.
+                </p>
+              </Panel>
+            </div>
+          </Section>
         </section>
       </div>
     </AppShell>

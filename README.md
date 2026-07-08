@@ -1,6 +1,6 @@
-# homewatch-app
+# HQWatchfolio
 
-`homewatch-app` is a Next.js foundation for a home watching business. It includes dedicated routes for:
+`HQWatchfolio` is the complete Home Watch management platform for professional companies that need modern SaaS workflows for visits, inspections, customer communication, maintenance, and hurricane readiness.
 
 - admin operations
 - client accounts
@@ -28,6 +28,12 @@ Open [http://localhost:3000](http://localhost:3000) to explore the app.
 - `/properties/[propertyId]` - property operations
 - `/portal/[propertyId]` - owner-facing portal
 - `/subcontractors` - subcontractor roster and dispatch queue
+
+## Brand
+
+- Primary domain: `HQWatchfolio.com`
+- Secondary domain: `HQWatchfolio.net`
+- Tagline: `The Complete Home Watch Management Platform`
 
 ## Tech
 

@@ -7,14 +7,14 @@ export default function ClientsPage() {
       <div className="space-y-8">
         <PageHero
           eyebrow="Client records"
-          title="Manage homeowner accounts separately from property operations."
-          body="The client layer now tracks who owns the homes, how they prefer to be contacted, and which plans and properties belong to them."
+          title="Manage customer accounts like a premium service platform."
+          body="HQWatchfolio keeps client profiles, emergency contacts, billing context, agreements, and property relationships organized in one modern workspace."
         />
 
         <Section
           eyebrow="Accounts"
           title="Every client now has its own detail route."
-          body="Use client pages to keep homeowner communication, property portfolio, and account context together."
+          body="Use client pages to keep homeowner communication, property portfolio, account paperwork, and billing context together."
         >
           <div className="grid gap-4 xl:grid-cols-2">
             {clients.map((client) => {
@@ -68,7 +68,7 @@ export default function ClientsPage() {
         <Section
           eyebrow="Portfolio split"
           title="Clients can own multiple homes under different plans."
-          body="This matters for billing, messaging, and portal access when the same owner has more than one watched property."
+          body="This matters for subscription billing, portal access, maintenance approvals, and service-level prioritization."
         >
           <div className="grid gap-4 md:grid-cols-3">
             {properties.map((property) => (

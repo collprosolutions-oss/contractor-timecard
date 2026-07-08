@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Home Watching HQ",
+  title: "HQWatchfolio",
   description:
-    "Multi-page operations and client portal foundation for a home watching business with routes for admin, clients, properties, portal reporting, and subcontractor management.",
+    "HQWatchfolio is the complete Home Watch management platform for visits, inspections, reports, maintenance, hurricane readiness, and client communication.",
 };
 
 export default function RootLayout({
@@ -26,7 +21,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-slate-950 text-slate-100">
         {children}

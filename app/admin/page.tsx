@@ -1,6 +1,6 @@
 import {
-  AppShell,
   Badge,
+  AppShell,
   PageHero,
   Panel,
   PrimaryLink,
@@ -10,96 +10,123 @@ import {
   StatGrid,
 } from "../components/homewatch-ui";
 import {
+  activities,
+  maintenanceRequests,
   getDispatchBoard,
   getOperationsSummary,
   money,
   plans,
   properties,
+  teamMembers,
   visits,
+  weatherAlerts,
+  workOrders,
 } from "../lib/homewatch";
 
 export default function AdminPage() {
   const summary = getOperationsSummary();
   const dispatchBoard = getDispatchBoard();
   const recentVisits = [...visits].reverse().slice(0, 3);
+  const recentWorkOrders = workOrders.slice(0, 3);
 
   return (
     <AppShell>
       <div className="space-y-8">
         <PageHero
-          eyebrow="Operations workspace"
-          title="Run the business from a dedicated admin dashboard."
-          body="This page is where the home watching company tracks recurring revenue, plan mix, portfolio activity, and subcontractor dispatches."
+          eyebrow="Office dashboard"
+          title="Run HQWatchfolio like an enterprise Home Watch operation."
+          body="Track today’s visits, active clients, weather exposure, hurricane readiness, maintenance, work orders, and recent activity from one modern operations screen."
           actions={
             <>
-              <PrimaryLink href="/properties">Review properties</PrimaryLink>
-              <PrimaryLink href="/subcontractors">Open dispatch board</PrimaryLink>
+              <PrimaryLink href="/properties">Review property portfolio</PrimaryLink>
+              <PrimaryLink href="/subcontractors">Open work orders</PrimaryLink>
             </>
           }
           sidecar={
             <div className="space-y-4">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-slate-400">
-                  Today&apos;s load
+                  Daily control center
                 </p>
-                <h2 className="mt-2 text-2xl font-semibold text-white">Operations snapshot</h2>
+                <h2 className="mt-2 text-2xl font-semibold text-white">HQWatchfolio Snapshot</h2>
               </div>
               <StatCard
-                label="MRR"
+                label="Monthly recurring revenue"
                 value={money(summary.activeMonthlyRevenue)}
-                detail={`${summary.propertyCount} active watched properties`}
+                detail={`${summary.propertyCount} active properties across the portfolio`}
               />
             </div>
           }
         />
 
         <Section
-          eyebrow="Business metrics"
-          title="Keep the service side visible."
-          body="The admin view now reads the same client, property, visit, alert, and dispatch data used across the rest of the app."
+          eyebrow="Today&apos;s metrics"
+          title="See the numbers that matter before the first truck rolls."
+          body="The dashboard now mirrors a real Home Watch office view with operations, weather, maintenance, and service delivery signals all in one place."
         >
           <StatGrid>
             <StatCard
+              label="Today&apos;s visits"
+              value={String(summary.todaysVisits)}
+              detail="Scheduled inspections on deck"
+            />
+            <StatCard
               label="Active clients"
               value={String(summary.clientCount)}
-              detail="Accounts receiving recurring service"
+              detail="Customers served this cycle"
             />
             <StatCard
-              label="Watched properties"
+              label="Active properties"
               value={String(summary.propertyCount)}
-              detail="Homes currently in the portfolio"
+              detail="Homes inside the watch portfolio"
             />
             <StatCard
-              label="Scheduled visits"
-              value={String(summary.scheduledVisits)}
-              detail="Next stops already on the board"
+              label="Completed visits"
+              value={String(summary.completedVisits)}
+              detail="Reports ready for portal delivery"
             />
             <StatCard
-              label="Open alerts"
-              value={String(summary.openAlerts)}
-              detail="Operational issues still being tracked"
+              label="Weather alerts"
+              value={String(summary.weatherAlerts)}
+              detail="Environmental watch items to review"
+            />
+            <StatCard
+              label="Hurricane alerts"
+              value={String(summary.hurricaneAlerts)}
+              detail="Priority properties needing readiness"
+            />
+            <StatCard
+              label="Open maintenance"
+              value={String(summary.openMaintenanceRequests)}
+              detail="Issues waiting for work order action"
+            />
+            <StatCard
+              label="Upcoming schedule"
+              value={String(summary.upcomingSchedule)}
+              detail="Visits visible in the routing lane"
             />
           </StatGrid>
         </Section>
 
         <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <Section
-            eyebrow="Plan mix"
-            title="Match plans to homes and service depth."
-            body="Each plan controls visit cadence, reporting depth, and which add-on services or partner lanes are active."
+            eyebrow="Upcoming schedule"
+            title="Today&apos;s route load and recurring visit plan."
+            body="Recurring visits, GPS verification, and checklist completion targets should all be visible to the office before dispatch."
           >
-            <div className="grid gap-4 lg:grid-cols-3">
-              {plans.map((plan) => (
+            <div className="grid gap-4">
+              {recentVisits.map((visit) => (
                 <Panel
-                  key={plan.id}
-                  title={plan.name}
-                  detail={plan.summary}
-                  aside={<Badge tone="sky">{money(plan.monthlyPrice)}/mo</Badge>}
+                  key={visit.id}
+                  title={`${visit.scheduledFor} · ${visit.watcher}`}
+                  detail={visit.summary}
+                  aside={<Badge tone={visit.gpsVerified ? "emerald" : "amber"}>{visit.gpsVerified ? "GPS verified" : "Needs GPS"}</Badge>}
                 >
                   <div className="space-y-2 text-sm text-slate-300">
-                    <p>{plan.visitCadence}</p>
-                    <p>{plan.reportTurnaround}</p>
-                    <p>{plan.responseWindow}</p>
+                    <p>Recurrence: {visit.recurrence}</p>
+                    <p>Check-in: {visit.checkIn}</p>
+                    <p>Check-out: {visit.checkOut}</p>
+                    <p>Arrival / departure photos: {visit.arrivalPhotos}/{visit.departurePhotos}</p>
                   </div>
                 </Panel>
               ))}
@@ -107,24 +134,24 @@ export default function AdminPage() {
           </Section>
 
           <Section
-            eyebrow="Recent visit activity"
-            title="Watch recent completions and follow-up."
-            body="Recent service events and follow-up signals now belong to the admin workflow rather than a single mixed homepage."
+            eyebrow="Weather and hurricane"
+            title="Protect priority properties before a storm hits."
+            body="HQWatchfolio surfaces weather pressure and hurricane readiness as a first-class operational workflow."
           >
             <div className="space-y-4">
-              {recentVisits.map((visit) => (
+              {weatherAlerts.map((alert) => (
                 <Panel
-                  key={visit.id}
-                  title={`${visit.scheduledFor} · ${visit.watcher}`}
-                  detail={visit.summary}
+                  key={alert.title}
+                  title={alert.title}
+                  detail={alert.detail}
                   aside={
-                    <Badge tone={visit.status === "completed" ? "emerald" : visit.status === "scheduled" ? "sky" : "amber"}>
-                      {visit.status}
+                    <Badge tone={alert.severity === "warning" ? "rose" : "amber"}>
+                      {alert.severity}
                     </Badge>
                   }
                 >
                   <p className="text-sm text-slate-300">
-                    Checklist completion: {visit.checklistCompletion}%
+                    Enterprise properties can be prioritized automatically during severe events.
                   </p>
                 </Panel>
               ))}
@@ -135,8 +162,8 @@ export default function AdminPage() {
         <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
           <Section
             eyebrow="Portfolio"
-            title="Jump from admin into specific homes."
-            body="Each property now has its own route where operations can review checklist scope, visit history, and vendor work."
+            title="Jump directly into watched properties."
+            body="The office can drill into any home to inspect access details, notes, checklist scope, reports, and maintenance history."
           >
             <div className="space-y-3">
               {properties.map((property) => {
@@ -155,9 +182,9 @@ export default function AdminPage() {
           </Section>
 
           <Section
-            eyebrow="Dispatch board"
-            title="Track partner work in one lane."
-            body="Service requests, owner approvals, and subcontractor assignments are grouped together so the business can manage work beyond the standard visit."
+            eyebrow="Maintenance and work orders"
+            title="Move from issue to action without leaving the dashboard."
+            body="Open maintenance requests, work orders, estimates, and vendor assignments belong in the same operational queue."
           >
             <div className="space-y-4">
               {dispatchBoard.map(({ request, property, subcontractor, service }) => (
@@ -186,6 +213,80 @@ export default function AdminPage() {
                   </div>
                 </Panel>
               ))}
+            </div>
+          </Section>
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+          <Section
+            eyebrow="Maintenance requests"
+            title="Open issues from inspections."
+            body="Inspection findings can become maintenance requests with status, category, and priority tracking."
+          >
+            <div className="space-y-4">
+              {maintenanceRequests.map((request) => (
+                <Panel
+                  key={request.id}
+                  title={request.title}
+                  detail={request.category}
+                  aside={
+                    <Badge tone={request.priority === "high" ? "rose" : request.priority === "medium" ? "amber" : "sky"}>
+                      {request.priority}
+                    </Badge>
+                  }
+                >
+                  <p className="text-sm text-slate-300">Status: {request.status}</p>
+                </Panel>
+              ))}
+            </div>
+          </Section>
+
+          <Section
+            eyebrow="Team, activity, and work orders"
+            title="Keep the office team aligned."
+            body="Roles, permissions, GPS policies, work order load, and recent activity should stay visible throughout the day."
+          >
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="space-y-4">
+                {teamMembers.map((member) => (
+                  <Panel key={member.id} title={member.name} detail={member.role} aside={<Badge tone="sky">{member.gpsTracking}</Badge>}>
+                    <div className="space-y-2 text-sm text-slate-300">
+                      <p>Shift: {member.shift}</p>
+                      <p>Permissions: {member.permissions.join(", ")}</p>
+                      <p>Performance: {member.performance}</p>
+                    </div>
+                  </Panel>
+                ))}
+              </div>
+              <div className="space-y-4">
+                {recentWorkOrders.map((workOrder) => (
+                  <Panel
+                    key={workOrder.id}
+                    title={workOrder.title}
+                    detail={`${workOrder.assignedTo} · ${workOrder.estimate}`}
+                    aside={
+                      <Badge
+                        tone={
+                          workOrder.status === "complete"
+                            ? "emerald"
+                            : workOrder.status === "in-progress"
+                              ? "amber"
+                              : "sky"
+                        }
+                      >
+                        {workOrder.status}
+                      </Badge>
+                    }
+                  >
+                    <p className="text-sm text-slate-300">Visible to the office dashboard and customer portal approval flow.</p>
+                  </Panel>
+                ))}
+                {activities.map((activity) => (
+                  <Panel key={`${activity.title}-${activity.timestamp}`} title={activity.title} detail={activity.detail} aside={<Badge>{activity.timestamp}</Badge>}>
+                    <p className="text-sm text-slate-300">Part of the recent activity stream.</p>
+                  </Panel>
+                ))}
+              </div>
             </div>
           </Section>
         </section>

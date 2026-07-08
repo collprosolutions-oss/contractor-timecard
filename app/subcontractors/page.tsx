@@ -10,15 +10,15 @@ export default function SubcontractorsPage() {
       <div className="space-y-8">
         <PageHero
           eyebrow="Subcontractor network"
-          title="Run the bring-a-pro lane as part of the app."
-          body="This route turns the vendor idea into a dedicated board where the business can manage approved partners, coverage, response time, and active dispatch jobs."
+          title="Run the pro network as part of HQWatchfolio."
+          body="This route turns vendor coordination into a dedicated board where the office can manage approved partners, dispatch work orders, estimates, and completion updates."
           actions={<PrimaryLink href="/admin">Back to admin</PrimaryLink>}
         />
 
         <Section
           eyebrow="Partner metrics"
           title="Keep the pro network visible."
-          body="The subcontractor route makes vendor capacity and active jobs part of daily operations."
+          body="The subcontractor route makes vendor capacity, response windows, work order volume, and field status part of daily operations."
         >
           <StatGrid>
             <StatCard
@@ -71,7 +71,7 @@ export default function SubcontractorsPage() {
           <Section
             eyebrow="Dispatch queue"
             title="Jobs currently moving through the network."
-            body="This is where add-on work becomes a visible operational workflow rather than a note hidden in a report."
+            body="This is where add-on work, maintenance dispatches, and estimate-based repairs become visible operational workflows rather than notes hidden in a report."
           >
             <div className="space-y-4">
               {dispatchBoard.map(({ request, property, subcontractor, service }) => (
