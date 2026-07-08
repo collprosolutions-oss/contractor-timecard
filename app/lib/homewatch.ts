@@ -1,8 +1,8 @@
 export const brand = {
   name: "HQWatchfolio",
   tagline: "The Complete Home Watch Management Platform",
-  primaryDomain: "HQWatchfolio.com",
-  secondaryDomain: "HQWatchfolio.net",
+  primaryDomain: "hqwatchfolio.com",
+  secondaryDomain: "hqwatchfolio.net",
 };
 
 export type PlanId = "core" | "plus" | "signature";

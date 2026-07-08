@@ -35,7 +35,7 @@ export function BrandLogo({
       />
       <div className="min-w-0">
         <p className="text-xl font-semibold tracking-tight text-white">{brand.name}</p>
-        <p className="text-sm text-slate-300">Premium Home Watch SaaS</p>
+        <p className="max-w-[16rem] text-[11px] leading-4 text-slate-300">{brand.tagline}</p>
       </div>
     </div>
   );

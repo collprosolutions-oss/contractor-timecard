@@ -1,17 +1,39 @@
-<svg width="1240" height="320" viewBox="0 0 1240 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1240" height="320" rx="36" fill="#FFFFFF"/>
-  <rect x="44" y="44" width="232" height="232" rx="52" fill="#0B1F3A"/>
-  <path d="M93 156L160 96L227 156" stroke="#1D8CFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M111 166V214C111 220.627 116.373 226 123 226H147V182H173V226H197C203.627 226 209 220.627 209 214V166" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M205 193C223.225 193 238 207.775 238 226C238 244.225 223.225 259 205 259C186.775 259 172 244.225 172 226" stroke="#1D8CFF" stroke-width="16" stroke-linecap="round"/>
-  <path d="M218 241L236 259" stroke="#1D8CFF" stroke-width="16" stroke-linecap="round"/>
-  <text x="318" y="146" fill="#0B1F3A" font-family="Inter, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="-2">
-    HQWatchfolio
+<svg width="1400" height="540" viewBox="0 0 1400 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoNavy" x1="103" y1="90" x2="450" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123D83"/>
+      <stop offset="1" stop-color="#062159"/>
+    </linearGradient>
+    <linearGradient id="logoBlue" x1="530" y1="58" x2="1010" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F93FF"/>
+      <stop offset="1" stop-color="#0B5BCF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="520" fill="#FFFFFF"/>
+  <rect x="103" y="92" width="89" height="281" fill="url(#logoNavy)"/>
+  <rect x="103" y="199" width="333" height="70" fill="url(#logoNavy)"/>
+  <rect x="347" y="92" width="89" height="281" fill="url(#logoNavy)"/>
+  <circle cx="731" cy="210" r="156" fill="none" stroke="url(#logoBlue)" stroke-width="60"/>
+  <path d="M842 318L1011 318L882 180L842 318Z" fill="url(#logoBlue)"/>
+  <path d="M857 189L933 259H901L857 214L813 259H781L857 189Z" fill="#123D83"/>
+  <rect x="806" y="259" width="102" height="83" fill="#FFFFFF"/>
+  <rect x="831" y="282" width="24" height="24" fill="#123D83"/>
+  <rect x="867" y="282" width="24" height="24" fill="#123D83"/>
+  <rect x="831" y="317" width="24" height="24" fill="#123D83"/>
+  <rect x="867" y="317" width="24" height="24" fill="#123D83"/>
+  <path d="M522 375C595 334 699 324 800 350C861 365 913 377 984 372C931 418 880 433 803 433H474C475.885 428.422 478.485 424.124 481.735 420.311C493.916 406.019 507.403 389.99 522 375Z" fill="url(#logoBlue)"/>
+  <text x="85" y="448" fill="#1D82E8" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" letter-spacing="-2">
+    HQ
   </text>
-  <text x="320" y="208" fill="#1D8CFF" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="0.5">
-    The Complete Home Watch Management Platform
+  <text x="239" y="448" fill="#062159" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" letter-spacing="-2">
+    WATCHFOLIO
   </text>
-  <text x="320" y="252" fill="#5B6B84" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="500">
-    Professional Home Watch operations, client care, inspections, hurricane response, and field service workflows.
+  <path d="M88 475H210" stroke="#1A5AC2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1187 475H1309" stroke="#1A5AC2" stroke-width="6" stroke-linecap="round"/>
+  <text x="244" y="482" fill="#062159" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="6">
+    THE COMPLETE HOME WATCH
+  </text>
+  <text x="300" y="520" fill="#062159" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="6">
+    MANAGEMENT PLATFORM
   </text>
 </svg>
