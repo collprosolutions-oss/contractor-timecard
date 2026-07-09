@@ -20,18 +20,25 @@ Open [http://localhost:3000](http://localhost:3000) to explore the app.
 
 ## Connect Your Real Web Address
 
-To use your own web address instead of localhost:
+To use `hqwatchfolio.com` instead of localhost:
 
-1. Set `NEXT_PUBLIC_SITE_URL` to your live domain, for example:
+1. Set `NEXT_PUBLIC_SITE_URL` to your live domain:
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+NEXT_PUBLIC_SITE_URL=https://hqwatchfolio.com
 ```
 
-2. Deploy the app to your hosting provider.
-3. Point your domain DNS to that deployment.
+2. Deploy the app to Vercel.
+3. Add your custom domains in the Vercel project:
+   - `hqwatchfolio.com`
+   - `www.hqwatchfolio.com`
+4. Add DNS records at your registrar or DNS provider:
+   - apex/root record: `A` record for `@` -> `76.76.21.21`
+   - subdomain record: `CNAME` record for `www` -> `cname.vercel-dns-0.com`
 
 The app now uses `NEXT_PUBLIC_SITE_URL` for metadata and canonical URL generation.
+
+Note: Vercel can sometimes show project-specific DNS values in the dashboard. If Vercel gives you a different target value for your project, use the value shown in Vercel.
 
 ## Add Your Own Logo
 
