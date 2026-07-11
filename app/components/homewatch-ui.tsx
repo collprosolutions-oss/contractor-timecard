@@ -18,6 +18,8 @@ export function BrandLogo({
           width={420}
           height={108}
           className="h-auto w-full max-w-[420px]"
+          sizes="(max-width: 768px) 100vw, 420px"
+          style={{ height: "auto" }}
           priority
         />
       </div>
