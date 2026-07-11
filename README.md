@@ -40,6 +40,10 @@ The app now uses `NEXT_PUBLIC_SITE_URL` for metadata and canonical URL generatio
 
 Note: Vercel can sometimes show project-specific DNS values in the dashboard. If Vercel gives you a different target value for your project, use the value shown in Vercel.
 
+For the full GitHub + Vercel + Namecheap launch sequence, see:
+
+- `docs/hqwatchfolio-launch-checklist.md`
+
 ## Add Your Own Logo
 
 To replace the current HQWatchfolio branding with your own logo:
