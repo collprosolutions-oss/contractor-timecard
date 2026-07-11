@@ -1,0 +1,45 @@
+<svg width="1400" height="560" viewBox="0 0 1400 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="navy" x1="112" y1="104" x2="440" y2="398" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123D83"/>
+      <stop offset="1" stop-color="#07205A"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="561" y1="76" x2="1018" y2="342" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1F92FF"/>
+      <stop offset="1" stop-color="#0A59C9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="560" fill="#FFFFFF"/>
+
+  <rect x="112" y="112" width="84" height="272" fill="url(#navy)"/>
+  <rect x="112" y="219" width="322" height="66" fill="url(#navy)"/>
+  <rect x="350" y="112" width="84" height="272" fill="url(#navy)"/>
+
+  <circle cx="740" cy="206" r="124" fill="none" stroke="url(#blue)" stroke-width="54"/>
+  <path d="M854 290L1010 290L913 190L854 290Z" fill="url(#blue)"/>
+  <path d="M520 381C586 344 678 335 784 357C860 373 933 378 1002 372C954 420 897 440 830 440H474C484.667 425.333 500 410 520 394C540 378 560 367 580 361L520 381Z" fill="url(#blue)"/>
+
+  <path d="M792 176L878 253H838L792 213L746 253H706L792 176Z" fill="#123D83"/>
+  <rect x="746" y="252" width="96" height="77" fill="#FFFFFF"/>
+  <rect x="770" y="274" width="21" height="21" fill="#123D83"/>
+  <rect x="801" y="274" width="21" height="21" fill="#123D83"/>
+  <rect x="770" y="305" width="21" height="21" fill="#123D83"/>
+  <rect x="801" y="305" width="21" height="21" fill="#123D83"/>
+
+  <text x="80" y="470" fill="#1B84EA" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" letter-spacing="-2">
+    HQ
+  </text>
+  <text x="228" y="470" fill="#07205A" font-family="Inter, Arial, sans-serif" font-size="88" font-weight="800" letter-spacing="-2">
+    WATCHFOLIO
+  </text>
+
+  <path d="M88 496H210" stroke="#1B84EA" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1190 496H1312" stroke="#1B84EA" stroke-width="6" stroke-linecap="round"/>
+
+  <text x="246" y="503" fill="#07205A" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="6">
+    THE COMPLETE HOME WATCH
+  </text>
+  <text x="302" y="545" fill="#07205A" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="6">
+    MANAGEMENT PLATFORM
+  </text>
+</svg>

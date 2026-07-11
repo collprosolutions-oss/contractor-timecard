@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HQWatchfolio
+
+`HQWatchfolio` is the complete Home Watch management platform for professional companies that need modern SaaS workflows for visits, inspections, customer communication, maintenance, and hurricane readiness.
+
+- admin operations
+- client accounts
+- property workflows
+- owner portal reporting
+- subcontractor coordination
 
 ## Getting Started
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to explore the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Connect Your Real Web Address
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To use `hqwatchfolio.com` instead of localhost:
 
-## Learn More
+1. Set `NEXT_PUBLIC_SITE_URL` to your live domain:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+NEXT_PUBLIC_SITE_URL=https://hqwatchfolio.com
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Deploy the app to Vercel.
+3. Add your custom domains in the Vercel project:
+   - `hqwatchfolio.com`
+   - `www.hqwatchfolio.com`
+4. Add DNS records at your registrar or DNS provider:
+   - apex/root record: `A` record for `@` -> `76.76.21.21`
+   - subdomain record: `CNAME` record for `www` -> `cname.vercel-dns-0.com`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The app now uses `NEXT_PUBLIC_SITE_URL` for metadata and canonical URL generation.
 
-## Deploy on Vercel
+Note: Vercel can sometimes show project-specific DNS values in the dashboard. If Vercel gives you a different target value for your project, use the value shown in Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For the full GitHub + Vercel + Namecheap launch sequence, see:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `docs/hqwatchfolio-launch-checklist.md`
+
+## Add Your Own Logo
+
+To replace the current HQWatchfolio branding with your own logo:
+
+- replace `public/brand-logo.svg` with your logo
+- replace `public/brand-icon.svg` with your square icon
+- replace `app/icon.svg` if you also want the browser/app icon updated
+
+The UI now reads from the generic `brand-logo` and `brand-icon` asset paths so you can swap artwork without editing components.
+
+## Current App Structure
+
+- `/` - landing page and workspace map
+- `/admin` - operations dashboard
+- `/clients` - client list
+- `/clients/[clientId]` - client detail
+- `/properties` - property list
+- `/properties/[propertyId]` - property operations
+- `/portal/[propertyId]` - owner-facing portal
+- `/subcontractors` - subcontractor roster and dispatch queue
+
+## Brand
+
+- Primary domain: `HQWatchfolio.com`
+- Secondary domain: `HQWatchfolio.net`
+- Tagline: `The Complete Home Watch Management Platform`
+
+## Tech
+
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS

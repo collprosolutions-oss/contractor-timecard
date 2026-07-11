@@ -1,496 +1,266 @@
-"use client";
+import {
+  AppShell,
+  Badge,
+  BrandLogo,
+  PageHero,
+  Panel,
+  PrimaryLink,
+  RouteCard,
+  SecondaryLink,
+  Section,
+  StatCard,
+  StatGrid,
+} from "./components/homewatch-ui";
+import {
+  activities,
+  brand,
+  marketingFeatures,
+  pricingTiers,
+  testimonials,
+  getOperationsSummary,
+  money,
+  reportModules,
+  teamMembers,
+} from "./lib/homewatch";
 
-import { useMemo, useState } from "react";
-
-type Entry = {
-  id: string;
-  date: string;
-  employee: string;
-  job: string;
-  start: string;
-  end: string;
-  wage: number;
-  expenses: number;
-  description: string;
-};
-
-function today() {
-  return new Date().toISOString().split("T")[0];
-}
-
-function hoursBetween(start: string, end: string) {
-  const [sh, sm] = start.split(":").map(Number);
-  const [eh, em] = end.split(":").map(Number);
-
-  let startMinutes = sh * 60 + sm;
-  let endMinutes = eh * 60 + em;
-
-  if (endMinutes < startMinutes) endMinutes += 24 * 60;
-
-  return Math.max((endMinutes - startMinutes) / 60, 0);
-}
-
-function money(amount: number) {
-  return `$${amount.toFixed(2)}`;
-}
-
-function weekStartMonday(dateString: string) {
-  const date = new Date(dateString + "T00:00:00");
-  const day = date.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-  date.setDate(date.getDate() + diff);
-  return date.toISOString().split("T")[0];
-}
-
-export default function Home() {
-  const [entries, setEntries] = useState<Entry[]>([]);
-
-  const [form, setForm] = useState({
-    date: today(),
-    employee: "Daniel",
-    job: "",
-    start: "08:00",
-    end: "17:00",
-    wage: 30,
-    expenses: 0,
-    description: "",
-  });
-
-  const currentHours = hoursBetween(form.start, form.end);
-  const currentGross = currentHours * form.wage;
-  const currentNet = currentGross - form.expenses;
-
-  const entriesWithTotals = entries.map((entry) => {
-    const hours = hoursBetween(entry.start, entry.end);
-    const gross = hours * entry.wage;
-    const net = gross - entry.expenses;
-
-    return {
-      ...entry,
-      hours,
-      gross,
-      net,
-      week: weekStartMonday(entry.date),
-      month: entry.date.slice(0, 7),
-      year: entry.date.slice(0, 4),
-    };
-  });
-
-  const totals = useMemo(() => {
-    return entriesWithTotals.reduce(
-      (acc, entry) => {
-        acc.hours += entry.hours;
-        acc.gross += entry.gross;
-        acc.expenses += entry.expenses;
-        acc.net += entry.net;
-        return acc;
-      },
-      { hours: 0, gross: 0, expenses: 0, net: 0 }
-    );
-  }, [entriesWithTotals]);
-
-  const weekly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
-    entriesWithTotals.forEach((entry) => {
-      if (!groups[entry.week]) groups[entry.week] = [];
-      groups[entry.week].push(entry);
-    });
-    return groups;
-  }, [entriesWithTotals]);
-
-  const monthly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
-    entriesWithTotals.forEach((entry) => {
-      if (!groups[entry.month]) groups[entry.month] = [];
-      groups[entry.month].push(entry);
-    });
-    return groups;
-  }, [entriesWithTotals]);
-
-  const yearly = useMemo(() => {
-    const groups: Record<string, typeof entriesWithTotals> = {};
-    entriesWithTotals.forEach((entry) => {
-      if (!groups[entry.year]) groups[entry.year] = [];
-      groups[entry.year].push(entry);
-    });
-    return groups;
-  }, [entriesWithTotals]);
-
-  function addEntry() {
-    setEntries([
-      ...entries,
-      {
-        id: crypto.randomUUID(),
-        ...form,
-      },
-    ]);
-
-    setForm({
-      ...form,
-      date: today(),
-      job: "",
-      expenses: 0,
-      description: "",
-    });
-  }
-
-  function deleteEntry(id: string) {
-    setEntries(entries.filter((entry) => entry.id !== id));
-  }
-
-  function exportCSV() {
-    const header =
-      "Date,Employee,Job,Start,End,Hours,Wage,Gross Pay,Expenses,Net Pay,Description\n";
-
-    const rows = entriesWithTotals
-      .map(
-        (e) =>
-          `"${e.date}","${e.employee}","${e.job}","${e.start}","${e.end}","${e.hours.toFixed(
-            2
-          )}","${e.wage.toFixed(2)}","${e.gross.toFixed(
-            2
-          )}","${e.expenses.toFixed(2)}","${e.net.toFixed(
-            2
-          )}","${e.description.replaceAll('"', '""')}"`
-      )
-      .join("\n");
-
-    const blob = new Blob([header + rows], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "contractor-time-card.csv";
-    link.click();
-
-    URL.revokeObjectURL(url);
-  }
+export default function Page() {
+  const summary = getOperationsSummary();
 
   return (
-    <main className="min-h-screen bg-slate-100 text-black p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <section className="bg-blue-900 text-white rounded-3xl p-6 shadow-lg">
-          <h1 className="text-3xl md:text-5xl font-bold">
-            Contractor Time Card App
-          </h1>
-          <p className="text-blue-100 mt-2 text-lg">
-            Track hours, pay, job descriptions, expenses, and reports.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-            <TotalBox title="Total Hours" value={totals.hours.toFixed(2)} />
-            <TotalBox title="Gross Pay" value={money(totals.gross)} />
-            <TotalBox title="Expenses" value={money(totals.expenses)} />
-            <TotalBox title="Net Pay" value={money(totals.net)} />
-          </div>
-        </section>
-
-        <section className="bg-white rounded-3xl shadow p-5 md:p-6">
-          <h2 className="text-2xl font-bold mb-4">Add Daily Time Card</h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            <Field label="Date">
-              <input
-                type="date"
-                value={form.date}
-                onChange={(e) => setForm({ ...form, date: e.target.value })}
-                className="input"
-              />
-            </Field>
-
-            <Field label="Employee Name">
-              <input
-                value={form.employee}
-                onChange={(e) =>
-                  setForm({ ...form, employee: e.target.value })
-                }
-                className="input"
-              />
-            </Field>
-
-            <Field label="Client / Job Name">
-              <input
-                value={form.job}
-                onChange={(e) => setForm({ ...form, job: e.target.value })}
-                placeholder="Example: Smith Kitchen Remodel"
-                className="input"
-              />
-            </Field>
-
-            <Field label="Start Time">
-              <input
-                type="time"
-                value={form.start}
-                onChange={(e) => setForm({ ...form, start: e.target.value })}
-                className="input"
-              />
-            </Field>
-
-            <Field label="End Time">
-              <input
-                type="time"
-                value={form.end}
-                onChange={(e) => setForm({ ...form, end: e.target.value })}
-                className="input"
-              />
-            </Field>
-
-            <Field label="Hourly Wage">
-              <input
-                type="number"
-                value={form.wage}
-                onChange={(e) =>
-                  setForm({ ...form, wage: Number(e.target.value) })
-                }
-                className="input"
-              />
-            </Field>
-
-            <Field label="Expenses">
-              <input
-                type="number"
-                value={form.expenses}
-                onChange={(e) =>
-                  setForm({ ...form, expenses: Number(e.target.value) })
-                }
-                className="input"
-              />
-            </Field>
-
-            <div className="md:col-span-2">
-              <Field label="Daily Work Description">
-                <textarea
-                  value={form.description}
-                  onChange={(e) =>
-                    setForm({ ...form, description: e.target.value })
-                  }
-                  placeholder="Describe the work done today..."
-                  className="input h-28"
+    <AppShell>
+      <div className="space-y-8">
+        <PageHero
+          eyebrow="Professional Home Watch SaaS"
+          badge="Built for Home Watch companies that want to scale like modern service businesses"
+          title="Run your Home Watch company on HQWatchfolio."
+          body="HQWatchfolio is the complete Home Watch management platform for GPS verified visits, inspections, AI-powered reports, hurricane preparation, maintenance coordination, customer communication, and office visibility."
+          actions={
+            <>
+              <PrimaryLink href="/admin">Start Free Trial</PrimaryLink>
+              <SecondaryLink href="/#demo">Book Demo</SecondaryLink>
+            </>
+          }
+          sidecar={
+            <div className="space-y-5">
+              <BrandLogo />
+              <div className="grid gap-3">
+                <StatCard
+                  label="Active properties"
+                  value={String(summary.propertyCount)}
+                  detail="Sample portfolio inside the platform"
                 />
-              </Field>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3 mt-5">
-            <SmallBox title="Hours" value={currentHours.toFixed(2)} />
-            <SmallBox title="Gross" value={money(currentGross)} />
-            <SmallBox title="Net" value={money(currentNet)} />
-          </div>
-
-          <button
-            onClick={addEntry}
-            className="mt-5 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl w-full md:w-auto"
-          >
-            Add Time Entry
-          </button>
-        </section>
-
-        <section className="bg-white rounded-3xl shadow p-5 md:p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-            <h2 className="text-2xl font-bold">Time Card Entries</h2>
-            <button
-              onClick={exportCSV}
-              className="bg-green-700 hover:bg-green-800 text-white font-bold px-5 py-3 rounded-xl"
-            >
-              Export CSV
-            </button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] border text-left">
-              <thead className="bg-slate-200">
-                <tr>
-                  <th className="th">Date</th>
-                  <th className="th">Employee</th>
-                  <th className="th">Job</th>
-                  <th className="th">Start</th>
-                  <th className="th">End</th>
-                  <th className="th">Hours</th>
-                  <th className="th">Wage</th>
-                  <th className="th">Gross</th>
-                  <th className="th">Expenses</th>
-                  <th className="th">Net</th>
-                  <th className="th">Description</th>
-                  <th className="th">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {entriesWithTotals.length === 0 && (
-                  <tr>
-                    <td className="td text-center" colSpan={12}>
-                      No time entries yet.
-                    </td>
-                  </tr>
-                )}
-
-                {entriesWithTotals.map((entry) => (
-                  <tr key={entry.id} className="border-t">
-                    <td className="td">{entry.date}</td>
-                    <td className="td">{entry.employee}</td>
-                    <td className="td">{entry.job}</td>
-                    <td className="td">{entry.start}</td>
-                    <td className="td">{entry.end}</td>
-                    <td className="td">{entry.hours.toFixed(2)}</td>
-                    <td className="td">{money(entry.wage)}</td>
-                    <td className="td">{money(entry.gross)}</td>
-                    <td className="td">{money(entry.expenses)}</td>
-                    <td className="td font-bold">{money(entry.net)}</td>
-                    <td className="td">{entry.description}</td>
-                    <td className="td">
-                      <button
-                        onClick={() => deleteEntry(entry.id)}
-                        className="bg-red-600 text-white px-3 py-2 rounded-lg"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <ReportSection title="Weekly Report" groups={weekly} />
-        <ReportSection title="Monthly Report" groups={monthly} />
-        <ReportSection title="Yearly Report" groups={yearly} />
-
-        <section className="bg-white rounded-3xl shadow p-5 md:p-6">
-          <h2 className="text-2xl font-bold mb-4">Future Paid App Features</h2>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            <Feature title="Individual Logins" text="Each employee gets their own account." />
-            <Feature title="Cloud Storage" text="Save time cards online permanently." />
-            <Feature title="Photo Uploads" text="Upload receipts and job photos." />
-            <Feature title="GPS Clock-In" text="Admin can turn GPS tracking on or off." />
-            <Feature title="Payroll Reports" text="Export payroll by week, month, or year." />
-            <Feature title="$4.99 Subscription" text="Charge users monthly with Stripe." />
-          </div>
-        </section>
-      </div>
-
-      <style jsx>{`
-        .input {
-          width: 100%;
-          padding: 12px;
-          border: 2px solid #64748b;
-          border-radius: 12px;
-          color: black;
-          background: white;
-          font-size: 16px;
-          outline: none;
-        }
-
-        .input::placeholder {
-          color: #64748b;
-        }
-
-        .input:focus {
-          border-color: #1d4ed8;
-          box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
-        }
-
-        .th {
-          padding: 12px;
-          font-weight: 800;
-          color: black;
-          border-bottom: 1px solid #cbd5e1;
-        }
-
-        .td {
-          padding: 12px;
-          color: black;
-          vertical-align: top;
-        }
-      `}</style>
-    </main>
-  );
-}
-
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="block">
-      <span className="block font-bold mb-2 text-black">{label}</span>
-      {children}
-    </label>
-  );
-}
-
-function TotalBox({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="bg-white/15 rounded-2xl p-4">
-      <p className="text-blue-100 text-sm">{title}</p>
-      <p className="text-2xl font-bold text-white">{value}</p>
-    </div>
-  );
-}
-
-function SmallBox({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="bg-slate-100 rounded-2xl p-4 border border-slate-300">
-      <p className="text-slate-700 text-sm font-semibold">{title}</p>
-      <p className="text-xl font-bold text-black">{value}</p>
-    </div>
-  );
-}
-
-function Feature({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="border border-slate-300 rounded-2xl p-4 bg-slate-50">
-      <h3 className="font-bold text-lg text-black">{title}</h3>
-      <p className="text-slate-700 mt-1">{text}</p>
-    </div>
-  );
-}
-
-function ReportSection({
-  title,
-  groups,
-}: {
-  title: string;
-  groups: Record<string, any[]>;
-}) {
-  const keys = Object.keys(groups).sort().reverse();
-
-  return (
-    <section className="bg-white rounded-3xl shadow p-5 md:p-6">
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
-
-      {keys.length === 0 && <p>No report data yet.</p>}
-
-      <div className="space-y-4">
-        {keys.map((key) => {
-          const total = groups[key].reduce(
-            (acc, entry) => {
-              acc.hours += entry.hours;
-              acc.gross += entry.gross;
-              acc.expenses += entry.expenses;
-              acc.net += entry.net;
-              return acc;
-            },
-            { hours: 0, gross: 0, expenses: 0, net: 0 }
-          );
-
-          return (
-            <div key={key} className="border border-slate-300 rounded-2xl p-4">
-              <h3 className="font-bold text-lg">{key}</h3>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
-                <SmallBox title="Hours" value={total.hours.toFixed(2)} />
-                <SmallBox title="Gross" value={money(total.gross)} />
-                <SmallBox title="Expenses" value={money(total.expenses)} />
-                <SmallBox title="Net" value={money(total.net)} />
+                <StatCard
+                  label="Completed visits"
+                  value={String(summary.completedVisits)}
+                  detail="Reports and media already flowing into the portal"
+                />
+                <StatCard
+                  label="HQWatchfolio MRR demo"
+                  value={money(summary.activeMonthlyRevenue)}
+                  detail="Example recurring subscription revenue"
+                />
               </div>
             </div>
-          );
-        })}
+          }
+        />
+
+        <Section
+          eyebrow="Core platform features"
+          title="Everything Home Watch companies need in one clean platform."
+          body="HQWatchfolio combines field workflows, customer communication, storm readiness, reporting, billing, and office operations into one enterprise-quality product."
+        >
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {marketingFeatures.map((feature) => (
+              <Panel key={feature.title} title={feature.title} detail={feature.description}>
+                <Badge tone="sky">HQWatchfolio</Badge>
+              </Panel>
+            ))}
+          </div>
+        </Section>
+
+        <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+          <Section
+            eyebrow="Office dashboard"
+            title="See the business before the day gets away from you."
+            body="Your office dashboard brings today’s visits, client load, active properties, maintenance, weather risk, and recent activity into one place."
+          >
+            <StatGrid>
+              <StatCard
+                label="Today's visits"
+                value={String(summary.todaysVisits)}
+                detail="Upcoming schedule ready for dispatch"
+              />
+              <StatCard
+                label="Active clients"
+                value={String(summary.clientCount)}
+                detail="Professional Home Watch accounts"
+              />
+              <StatCard
+                label="Weather alerts"
+                value={String(summary.weatherAlerts)}
+                detail="Storm and severe weather warnings"
+              />
+              <StatCard
+                label="Open maintenance"
+                value={String(summary.openMaintenanceRequests)}
+                detail="Requests waiting on action"
+              />
+            </StatGrid>
+            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+              {activities.map((activity) => (
+                <Panel
+                  key={`${activity.title}-${activity.timestamp}`}
+                  title={activity.title}
+                  detail={activity.detail}
+                  aside={<Badge>{activity.timestamp}</Badge>}
+                >
+                  <p className="text-sm text-slate-300">Visible in the office dashboard activity feed.</p>
+                </Panel>
+              ))}
+            </div>
+          </Section>
+
+          <Section
+            eyebrow="Platform modules"
+            title="Built to become the Jobber or ServiceTitan of Home Watch."
+            body="The product scope already maps the core modules needed to run professional operations end to end."
+          >
+            <div className="space-y-4">
+              <Panel
+                title="Team Management"
+                detail={`${teamMembers.length} sample team profiles cover roles, GPS policies, scheduling, and performance.`}
+              >
+                <Badge tone="emerald">Employees · Permissions · Payroll export</Badge>
+              </Panel>
+              <Panel
+                title="Reporting & Billing"
+                detail={`Revenue, visits, inspections, GPS logs, invoices, recurring billing, and QuickBooks-ready exports are represented in the data model.`}
+              >
+                <Badge tone="sky">{reportModules.length} report categories</Badge>
+              </Panel>
+              <Panel
+                title="Mobile & Offline"
+                detail="Field teams can capture GPS, photos, signatures, and notes while keeping the experience designed for a fast mobile workflow."
+              >
+                <Badge tone="amber">iPhone · Android · Offline mode</Badge>
+              </Panel>
+            </div>
+          </Section>
+        </section>
+
+        <Section
+          eyebrow="Testimonials"
+          title="Customer proof will live here."
+          body="Placeholder cards are ready for early adopter quotes from professional Home Watch operators once they come in."
+        >
+          <div className="grid gap-4 lg:grid-cols-2">
+            {testimonials.map((testimonial) => (
+              <Panel
+                key={testimonial.role}
+                title={testimonial.person}
+                detail={testimonial.role}
+                aside={<Badge tone="sky">Placeholder</Badge>}
+              >
+                <p className="text-sm leading-7 text-slate-300">{testimonial.quote}</p>
+              </Panel>
+            ))}
+          </div>
+        </Section>
+
+        <Section
+          eyebrow="Pricing"
+          title="Simple SaaS packaging for Home Watch teams."
+          body="Starter, Professional, and Enterprise plans align with how Home Watch companies grow from owner-operator to premium multi-team operations."
+        >
+          <div id="pricing" className="grid gap-4 lg:grid-cols-3">
+            {pricingTiers.map((tier) => (
+              <Panel
+                key={tier.name}
+                title={tier.name}
+                detail={tier.summary}
+                aside={<Badge tone="sky">{tier.priceLabel}</Badge>}
+              >
+                <div className="space-y-3">
+                  <ul className="space-y-2 text-sm text-slate-300">
+                    {tier.features.map((feature) => (
+                      <li key={feature} className="rounded-2xl border border-white/10 bg-slate-950/60 px-3 py-2">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                  <PrimaryLink href="/admin">{tier.cta}</PrimaryLink>
+                </div>
+              </Panel>
+            ))}
+          </div>
+        </Section>
+
+        <Section
+          eyebrow="Explore the app"
+          title="Step inside the product."
+          body="The platform is already split into purpose-built routes for office teams, field staff, homeowners, and subcontractors."
+        >
+          <div id="demo" className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+            <RouteCard
+              href="/admin"
+              meta="Office Dashboard"
+              title="Operations command center"
+              body="Track today's visits, active clients, weather alerts, maintenance, and revenue."
+            />
+            <RouteCard
+              href="/clients"
+              meta="Client Management"
+              title="Client records"
+              body="Manage contact info, emergency contacts, billing, documents, and agreements."
+            />
+            <RouteCard
+              href="/properties"
+              meta="Property Portfolio"
+              title="Property management"
+              body="Open each home to review GPS, access codes, vendors, notes, insurance, HOA, and keys."
+            />
+            <RouteCard
+              href="/portal/prop-seabrook"
+              meta="Customer Portal"
+              title="Owner experience"
+              body="Show reports, invoices, approvals, notifications, and visit history in one polished portal."
+            />
+            <RouteCard
+              href="/subcontractors"
+              meta="Work Orders"
+              title="Pro network and dispatch"
+              body="Assign vendors, track work orders, and coordinate maintenance from inspection findings."
+            />
+            <RouteCard
+              href="/properties/prop-seabrook"
+              meta="Inspection Engine"
+              title="Visit and checklist workflow"
+              body="See recurring visits, customizable inspection categories, and AI report generation inputs."
+            />
+          </div>
+        </Section>
+
+        <footer className="rounded-[2rem] border border-white/10 bg-slate-950/70 px-6 py-8 shadow-xl shadow-slate-950/20">
+          <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+            <div className="space-y-4">
+              <BrandLogo />
+              <p className="max-w-2xl text-sm leading-7 text-slate-300">
+                {brand.name} is built to be the complete Home Watch management platform for professional operators that want a premium, modern, enterprise-grade system.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Panel title="Domains" detail={`${brand.primaryDomain} · ${brand.secondaryDomain}`}>
+                <p className="text-sm text-slate-300">Primary brand presence and secondary network domain.</p>
+              </Panel>
+              <Panel title="Primary workflows" detail="Visits, inspections, reports, billing, maintenance, and hurricane readiness">
+                <p className="text-sm text-slate-300">
+                  Designed for Home Watch operations, not adapted from generic service software.
+                </p>
+              </Panel>
+            </div>
+          </div>
+        </footer>
       </div>
-    </section>
+    </AppShell>
   );
 }
